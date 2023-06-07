@@ -14,6 +14,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "username")
+    private String username;
     @Column(name = "first_name")
     private String firstName;
 
@@ -56,7 +58,8 @@ public class User {
 
     }
 
-    public User(String firstName, String lastName, String email, String password, String phone, String department, LocalDate hireDate, BigDecimal salary, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(String username, String firstName, String lastName, String email, String password, String phone, String department, LocalDate hireDate, BigDecimal salary, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -76,6 +79,14 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
