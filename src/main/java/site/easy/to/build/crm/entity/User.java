@@ -54,11 +54,14 @@ public class User {
         ACTIVE, INACTIVE, TERMINATED
     }
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private OAuthUser oauthUser;
     public User() {
 
     }
 
-    public User(String username, String firstName, String lastName, String email, String password, String phone, String department, LocalDate hireDate, BigDecimal salary, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(String username, String firstName, String lastName, String email, String password, String phone, String department, LocalDate hireDate, BigDecimal salary, Status status, LocalDateTime createdAt, LocalDateTime updatedAt, OAuthUser oauthUsers) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -71,6 +74,7 @@ public class User {
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.oauthUser = oauthUsers;
     }
 
     public Integer getId() {
@@ -175,6 +179,14 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public OAuthUser getOauthUser() {
+        return oauthUser;
+    }
+
+    public void setOauthUser(OAuthUser oauthUser) {
+        this.oauthUser = oauthUser;
     }
 }
 
