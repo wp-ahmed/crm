@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/favicon.png}">
+    <title>Elite Admin Template - The Ultimate Multipurpose admin template</title>
+
+    <!-- page css -->
+    <link th:href="@{/css/login-register-lock.css}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link th:href="@{/css/style.min.css}" rel="stylesheet">
+
+</head>
+
+<body>
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">Elite admin</p>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+
+<section id="wrapper" class="login-register login-sidebar" th:style="'background:url(' + @{/images/login-register.jpg} + ');'">
+    <div class="login-box card">
+        <div class="card-body">
+            <form class="form-horizontal form-material" id="loginform" th:action="@{/register}" th:object="${user}" method="post">
+                <div class="text-center">
+                    <a href="javascript:void(0)" class="db"><img th:src="@{images/logo-icon.png}" alt="Home" /><br/><img th:src="@{/images/logo-text.png}" alt="Home" /></a>
+                </div>
+                <h3 class="box-title m-t-40 m-b-0">Register Now</h3><small>Create your account and enjoy</small>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="username">Username:</label>
+                        <input class="form-control" type="text" id="username" th:field="*{username}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="firstName">First Name:</label>
+                        <input class="form-control" type="text" id="firstName" th:field="*{firstName}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="lastName">Last Name:</label>
+                        <input class="form-control" type="text" id="lastName" th:field="*{lastName}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="email">Email:</label>
+                        <input class="form-control" type="email" id="email" th:field="*{email}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="password">Password:</label>
+                        <input class="form-control" type="password" id="password" th:field="*{password}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="phone">Phone:</label>
+                        <input class="form-control" type="tel" id="phone" th:field="*{phone}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="department">Department:</label>
+                        <input class="form-control" type="text" id="department" th:field="*{department}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="hireDate">Hire Date:</label>
+                        <input class="form-control" type="date" id="hireDate" th:field="*{hireDate}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="salary">Salary:</label>
+                        <input class="form-control" type="number" step="0.01" id="salary" th:field="*{salary}" required />
+                    </div>
+                </div>
+                <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                        <label for="status">Status:</label>
+                        <select id="status" th:field="*{status}" required>
+                            <option th:each="status : ${T(site.easy.to.build.crm.entity.User.Status).values()}"
+                                    th:value="${status.name()}" th:text="${status.name()}"></option>
+                        </select>
+                    </div>
+                </div>
+<!--                <div class="form-group row">-->
+<!--                    <div class="col-md-12">-->
+<!--                        <div class="custom-control custom-checkbox">-->
+<!--                            <input type="checkbox" class="custom-control-input" id="customCheck1">-->
+<!--                            <label class="custom-control-label" for="customCheck1">I agree to all <a href="javascript:void(0)">Terms</a></label>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                        <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Sign Up</button>
+                    </div>
+                </div>
+                <div class="form-group m-b-0">
+                    <div class="col-sm-12 text-center">
+                        <p>Already have an account? <a href="pages-login-2.html" class="text-info m-l-5"><b>Sign In</b></a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<!-- Bootstrap tether Core JavaScript -->
+<script th:src="@{/js/popper.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+</body>
+
+</html>
