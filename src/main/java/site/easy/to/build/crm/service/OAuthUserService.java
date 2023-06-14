@@ -7,9 +7,13 @@ import java.security.Principal;
 
 public interface OAuthUserService {
 
-    OAuthUser findById(int id);
+    public OAuthUser findById(int id);
 
-    void save(OAuthUser oAuthUser, User user);
+    public OAuthUser getOAuthUserByUser(User user);
 
-    void deleteById(int id);
+    public String refreshAccessTokenIfNeeded(OAuthUser oauthUser);
+
+    public void save(OAuthUser oAuthUser, User user);
+
+    public void deleteById(int id);
 }
