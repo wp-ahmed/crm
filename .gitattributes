@@ -1,2 +1,4 @@
 * linguist-detectable=true
 src/main/resources/static/images/* linguist-vendored
+src/main/resources/static/fonts/* linguist-vendored
+src/main/resources/static/font-awesome/* linguist-vendored
