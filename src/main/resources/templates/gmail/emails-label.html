@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{/general/head.html}"></div>
+<!-- Custom CSS -->
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!-- page css -->
+<link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="skin-blue fixed-layout">
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">CRM admin</p>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/header.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/left-sidebar.html}"></div>
+
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div th:insert="~{/general/page-titles.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4" th:insert="~{/gmail/template/side-bar-labels.html}"></div>
+                            <div class="col-lg-9 col-md-8 bg-light border-left">
+                                <!--TODO later add the filter options-->
+<!--                                <div class="card-body" th:insert="~{/gmail/template/filter-menu.html}"></div>-->
+                                <div class="card-body p-t-0">
+                                    <div class="card b-all shadow-none" id="cardBody">
+                                        <div class="inbox-center table-responsive">
+                                            <div class="alert alert-success" id="success-message" th:if="${successMessage}">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                                <h3 class="text-success">
+                                                    <i class="fa fa-check-circle"></i> Success
+                                                </h3>
+                                                <span th:text="${successMessage}"></span>
+                                            </div>
+                                            <table class="table table-hover no-wrap">
+                                                <tbody>
+                                                <tr th:each="email : ${emails}" th:class="${email.read==true ? 'read' : 'unread'}">
+                                                    <td style="width:40px">
+                                                        <div class="custom-control custom-checkbox mr-sm-2">
+                                                            <input type="checkbox" class="custom-control-input" th:id="'checkbox0' + ${email.id}" th:value="${email.id}" name="emailIds" />
+                                                            <label class="custom-control-label" th:for="'checkbox0' + ${email.id}"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width:40px" class="hidden-xs-down"><i class="fa fa-star-o"></i></td>
+                                                    <td class="hidden-xs-down">
+                                                        <a th:if="${label=='draft'}" th:href="'/gmail/send-draft/' + ${email.draftId}">
+                                                            <span th:text="${email.recipient}"></span>
+                                                        </a>
+                                                        <a th:if="${label!='draft'}" th:href="'/gmail/email-details/' + ${email.id}">
+                                                            <span th:text="${email.recipient}"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td class="max-texts">
+                                                        <a th:if="${label=='draft'}" th:href="'/gmail/send-draft/' + ${email.draftId}">
+<!--                                                            <span class="label label-info m-r-10">Work</span>-->
+                                                            <span th:text="${email.subject}"></span>
+                                                        </a>
+                                                        <a th:if="${label!='draft'}" th:href="'/gmail/email-details/' + ${email.id}">
+<!--                                                            <span class="label label-info m-r-10">Work</span>-->
+                                                            <span th:text="${email.subject}"></span>
+                                                        </a>
+                                                    </td>
+                                                    <td class="hidden-xs-down"><i th:if="${email.attachments.size !=0}" class="fa fa-paperclip"></i></td>
+                                                </tr>
+                                                </tbody>
+                                                <p th:if="${emails == null}" th:text="'No Conversation in '+${label}" class="text-center text-bold"></p>
+                                            </table>
+                                            <div th:if="${emails != null}" class="d-flex justify-content-between" id="pagination">
+                                                <button class="btn waves-effect waves-light btn-info" id="prevButton" th:unless="${currentPage == 1}">prev</button>
+                                                <button class="btn waves-effect waves-light btn-info ml-auto" id="nextButton">next</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End PAge Content -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right sidebar -->
+            <!-- ============================================================== -->
+            <!-- .right-sidebar -->
+            <div th:insert="~{/general/right-sidebar.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Right sidebar -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/footer.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script th:src="@{/js/jquery-3.2.1.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
+<script th:src="@{/js/popper.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/bootstrap.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; slimscrollbar scrollbar JavaScript &ndash;&gt;-->
+<script th:src="@{/js/perfect-scrollbar.jquery.min.js}" type="text/javascript">></script>
+<!--Wave Effects -->
+<script th:src="@{/js/waves.js}" type="text/javascript"></script>
+<!--Menu sidebar -->
+<script th:src="@{/js/sidebarmenu.js}" type="text/javascript">></script>
+<!--stickey kit -->
+<script th:src="@{/js/sticky-kit.min.js}"></script>
+<script th:src="@{/js/jquery.sparkline.min.js}" type="text/javascript">></script>
+<!--Custom JavaScript -->
+<script th:src="@{/js/custom.min.js}" type="text/javascript">></script>
+<script>
+    $(document).ready(function() {
+      var currentPage = [[${currentPage}]]; // Use Thymeleaf variable
+      var label ="[[${label}]]"; // Use Thymeleaf variable
+
+     $("#pagination").on("click", "#nextButton", function() {
+        updateEmailList(currentPage + 1,label);
+      });
+
+      $("#pagination").on("click", "#prevButton", function() {
+        updateEmailList(currentPage - 1,label);
+      });
+
+      function updateEmailList(page,label) {
+        // Show a loading indicator
+        // ...
+          let preLoad = `
+                    <div class="preloader">
+                        <div class="loader">
+                            <div class="loader__figure"></div>
+                            <p class="loader__label">CRM admin</p>
+                        </div>
+                    </div>`;
+          let bid = $("#cardBody");
+          bid.append(preLoad);
+        // Fetch the email list using AJAX
+        $.getJSON(`/gmail/emails-json/${label}?page=${page}`, function(emailsPerPage) {
+          // Update the table content
+          console.log("190" + label);
+          let tableBody = $("table tbody");
+          tableBody.empty();
+
+                    tableBody.append(preLoad);
+          $.each(emailsPerPage.emails, function(index, email) {
+            // Create a new table row
+            let subjectLink = `
+                  <a href="/gmail/email-details/${email.id}">
+                    <span>${email.subject}</span>
+                  </a>`;
+             let emailLink = `
+                  <a href="/gmail/email-details/${email.id}">
+                    <span>${email.recipient}</span>
+                  </a>`;
+            if(label === "draft") {
+                subjectLink = `
+                  <a href="/gmail/send-draft/${email.draftId}">
+                    <span>${email.subject}</span>
+                  </a>`;
+                 emailLink = `
+                  <a href="/gmail/send-draft/${email.draftId}">
+                    <span>${email.recipient}</span>
+                  </a>`;
+            }
+            let newRow = `
+              <tr class="unread">
+                <td style="width:40px">
+                  <div class="custom-control custom-checkbox mr-sm-2">
+                    <input type="checkbox" class="custom-control-input" id="checkbox0${email.id}" value="${email.id}" name="emailIds" />
+                    <label class="custom-control-label" for="checkbox0${email.id}"></label>
+                  </div>
+                </td>
+                <td style="width:40px" class="hidden-xs-down"><i class="fa fa-star-o"></i></td>
+                <td class="hidden-xs-down">${emailLink}</td>
+                <td class="max-texts">
+                    ${subjectLink}
+                </td>
+                <td class="hidden-xs-down"><i class="fa fa-paperclip"></i></td>
+              </tr>
+            `;
+
+            // Add the new row to the table
+            tableBody.append(newRow);
+          });
+
+          // Hide the loading indicator
+          // ...
+        $(function () {
+            $("#nextButton").remove();
+            $("#prevButton").remove();
+            $("#success-message").remove();
+            if(page>1) {
+                var prevButton = `<button class="btn waves-effect waves-light btn-info" id="prevButton">prev</button>`;
+                $("#pagination").append(prevButton);
+            }
+            if(emailsPerPage.nextPageToken != null){
+                var nextButton = `<button class="btn waves-effect waves-light btn-info" id="nextButton">next</button>`;
+                $("#pagination").append(nextButton);
+            }
+            $(".preloader").fadeOut();
+            $('#cardBody .preloader').remove();
+            var currentUrl = window.location.href;
+            var baseUrl = currentUrl.split('?')[0];
+            var url = new URL(baseUrl);
+            url.searchParams.set('page', page);
+            window.history.pushState(null, null, url.toString());
+        });
+          // Update the currentPage variable
+          currentPage = page;
+        });
+      }
+    });
+</script>
+</body>
+
+</html>
