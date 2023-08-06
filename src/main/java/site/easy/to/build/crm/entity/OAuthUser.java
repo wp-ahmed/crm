@@ -1,9 +1,11 @@
 package site.easy.to.build.crm.entity;
 
 import jakarta.persistence.*;
+import site.easy.to.build.crm.converter.StringSetConverter;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "oauth_users")
@@ -12,6 +14,10 @@ public class OAuthUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "granted_scopes")
+    @Convert(converter = StringSetConverter.class)
+    private Set<String> grantedScopes = new HashSet<>();
 
     @Column(name = "access_token")
     private String accessToken;
@@ -38,7 +44,8 @@ public class OAuthUser {
     public OAuthUser() {
     }
 
-    public OAuthUser(String accessToken, Instant accessTokenIssuedAt, Instant accessTokenExpiration, String refreshToken, Instant refreshTokenIssuedAt, Instant refreshTokenExpiration, User user) {
+    public OAuthUser(Set<String> grantedScopes, String accessToken, Instant accessTokenIssuedAt, Instant accessTokenExpiration, String refreshToken, Instant refreshTokenIssuedAt, Instant refreshTokenExpiration, User user) {
+        this.grantedScopes = grantedScopes;
         this.accessToken = accessToken;
         this.accessTokenIssuedAt = accessTokenIssuedAt;
         this.accessTokenExpiration = accessTokenExpiration;
@@ -56,6 +63,13 @@ public class OAuthUser {
         this.id = id;
     }
 
+    public Set<String> getGrantedScopes() {
+        return grantedScopes;
+    }
+
+    public void setGrantedScopes(Set<String> grantedScopes) {
+        this.grantedScopes = grantedScopes;
+    }
 
     public String getAccessToken() {
         return accessToken;
