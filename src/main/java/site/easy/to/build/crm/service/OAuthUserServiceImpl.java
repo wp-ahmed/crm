@@ -2,10 +2,14 @@ package site.easy.to.build.crm.service;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleRefreshTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.stereotype.Service;
 import site.easy.to.build.crm.dao.OAuthUserRepository;
 import site.easy.to.build.crm.dao.UserRepository;
@@ -13,6 +17,7 @@ import site.easy.to.build.crm.entity.OAuthUser;
 import site.easy.to.build.crm.entity.User;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.Instant;
 
 @Service
@@ -23,6 +28,18 @@ public class OAuthUserServiceImpl implements OAuthUserService{
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
+
+    private static final String APPLICATION_NAME = "Your-Application-Name";
+    private static final GsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private static NetHttpTransport HTTP_TRANSPORT;
+    static {
+        try {
+            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            HTTP_TRANSPORT = null;
+        }
+    }
 
     @Autowired
     OAuthUserRepository oAuthUserRepository;
@@ -75,6 +92,24 @@ public class OAuthUserServiceImpl implements OAuthUserService{
     }
 
     @Override
+    public void revokeAccess(OAuthUser oAuthUser) {
+        try {
+            final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+            HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
+
+            GenericUrl url = new GenericUrl("https://accounts.google.com/o/oauth2/revoke");
+            url.set("token", oAuthUser.getAccessToken());
+
+            HttpRequest request = requestFactory.buildGetRequest(url);
+            request.execute();
+        } catch (HttpResponseException e) {
+            // Handle the error response if needed
+        } catch (GeneralSecurityException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void save(OAuthUser oAuthUser, User user) {
         oAuthUser.setUser(user);
         user.setOauthUser(oAuthUser);
@@ -84,6 +119,18 @@ public class OAuthUserServiceImpl implements OAuthUserService{
     @Override
     public void deleteById(int id) {
 
+    }
+
+    public void updateOAuthUserTokens(OAuthUser oAuthUser, OAuth2AccessToken oAuth2AccessToken, OAuth2RefreshToken oAuth2RefreshToken) {
+        oAuthUser.setAccessToken(oAuth2AccessToken.getTokenValue());
+        oAuthUser.setAccessTokenIssuedAt(oAuth2AccessToken.getIssuedAt());
+        oAuthUser.setAccessTokenExpiration(oAuth2AccessToken.getExpiresAt());
+
+        if(oAuth2RefreshToken != null) {
+            oAuthUser.setRefreshToken(oAuth2RefreshToken.getTokenValue());
+            oAuthUser.setRefreshTokenIssuedAt(oAuth2RefreshToken.getIssuedAt());
+            oAuthUser.setRefreshTokenExpiration(oAuth2RefreshToken.getExpiresAt());
+        }
     }
 
 }

@@ -1,9 +1,10 @@
 package site.easy.to.build.crm.service;
 
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import site.easy.to.build.crm.entity.OAuthUser;
 import site.easy.to.build.crm.entity.User;
 
-import java.security.Principal;
 
 public interface OAuthUserService {
 
@@ -13,7 +14,13 @@ public interface OAuthUserService {
 
     public String refreshAccessTokenIfNeeded(OAuthUser oauthUser);
 
+    public void revokeAccess(OAuthUser oAuthUser);
+
     public void save(OAuthUser oAuthUser, User user);
 
     public void deleteById(int id);
+
+    public void updateOAuthUserTokens(OAuthUser oAuthUser, OAuth2AccessToken oAuth2AccessToken, OAuth2RefreshToken oAuth2RefreshToken);
+
+
 }
