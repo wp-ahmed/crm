@@ -1,0 +1,24 @@
+
+    <div class="card-body inbox-panel"><a href="/gmail/send" class="btn btn-danger m-b-20 p-10 btn-block waves-effect waves-light">Compose</a>
+        <ul class="list-group list-group-full">
+            <li th:class="${label == null ? 'list-group-item active' : 'list-group-item'}"> <a href="/gmail/emails"><i class="mdi mdi-gmail"></i> Inbox </a><span th:text="${count}" class="badge badge-success ml-auto"></span></li>
+            <li th:class="${label == 'starred' ? 'list-group-item active' : 'list-group-item'}">
+                <a href="/gmail/emails/starred"> <i class="mdi mdi-star"></i> Starred </a>
+            </li>
+            <li th:class="${label == 'draft' ? 'list-group-item active' : 'list-group-item'}">
+                <a href="/gmail/emails/draft"> <i class="mdi mdi-send"></i> Draft </a><span class="badge badge-danger ml-auto" th:text="${draft}"></span></li>
+            <li th:class="${label == 'sent' ? 'list-group-item active' : 'list-group-item'}">
+                <a href="/gmail/emails/sent"> <i class="mdi mdi-file-document-box"></i> Sent Mail </a>
+            </li>
+            <li th:class="${label == 'trash' ? 'list-group-item active' : 'list-group-item'}">
+                <a href="/gmail/emails/trash"> <i class="mdi mdi-delete"></i> Trash </a>
+            </li>
+        </ul>
+        <!--                                        TODO add the labels later and give the user the ability to assign labels-->
+        <!--                                        <h3 class="card-title m-t-40">Labels</h3>-->
+        <!--                                        <div class="list-group b-0 mail-list">-->
+        <!--                                            <a th:each="label : ${labels}" href="javascript:void(0)" class="list-group-item">-->
+        <!--                                                <span class="fa fa-circle text-info m-r-10"></span><span th:text="${label}">Work</span>-->
+        <!--                                            </a>-->
+        <!--                                        </div>-->
+    </div>
