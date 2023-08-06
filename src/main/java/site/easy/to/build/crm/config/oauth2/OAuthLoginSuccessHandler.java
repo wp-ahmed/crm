@@ -75,26 +75,16 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
             user.setDepartment("client");
             userService.save(user);
             oAuthUser = new OAuthUser();
-            updateOAuthUserTokens(oAuthUser, oAuth2AccessToken, oAuth2RefreshToken);
+            oAuthUser.getGrantedScopes().add("openid");
+            oAuthUser.getGrantedScopes().add("email");
+            oAuthUser.getGrantedScopes().add("profile");
+            oAuthUserService.updateOAuthUserTokens(oAuthUser, oAuth2AccessToken, oAuth2RefreshToken);
         }else{
             oAuthUser = user.getOauthUser();
-            updateOAuthUserTokens(oAuthUser,oAuth2AccessToken,oAuth2RefreshToken);
         }
 
         oAuthUserService.save(oAuthUser,user);
 
-        response.sendRedirect("/register");
-    }
-
-    private void updateOAuthUserTokens(OAuthUser oAuthUser,OAuth2AccessToken oAuth2AccessToken, OAuth2RefreshToken oAuth2RefreshToken) {
-        oAuthUser.setAccessToken(oAuth2AccessToken.getTokenValue());
-        oAuthUser.setAccessTokenIssuedAt(oAuth2AccessToken.getIssuedAt());
-        oAuthUser.setAccessTokenExpiration(oAuth2AccessToken.getExpiresAt());
-
-        if(oAuth2RefreshToken != null) {
-            oAuthUser.setRefreshToken(oAuth2RefreshToken.getTokenValue());
-            oAuthUser.setRefreshTokenIssuedAt(oAuth2RefreshToken.getIssuedAt());
-            oAuthUser.setRefreshTokenExpiration(oAuth2RefreshToken.getExpiresAt());
-        }
+        response.sendRedirect("/settings/google-services");
     }
 }
