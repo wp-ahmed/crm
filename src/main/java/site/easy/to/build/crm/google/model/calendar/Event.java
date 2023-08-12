@@ -1,15 +1,24 @@
 package site.easy.to.build.crm.google.model.calendar;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.lang.reflect.Array;
+import java.util.List;
 import java.util.Map;
 
 public class Event {
+//    @JsonIgnore
     private String id;
     private String summary;
     private EventDateTime start;
     private EventDateTime end;
+//    @JsonIgnore
     private String timeZone;
+    private List<EventAttendee>attendees;
+    @JsonIgnore
     private String transparency;
+    @JsonIgnore
     private ExtendedProperties extendedProperties;
 
     public String getId() {
@@ -66,6 +75,14 @@ public class Event {
 
     public void setExtendedProperties(ExtendedProperties extendedProperties) {
         this.extendedProperties = extendedProperties;
+    }
+
+    public List<EventAttendee> getAttendees() {
+        return attendees;
+    }
+
+    public void setAttendees(List<EventAttendee> attendees) {
+        this.attendees = attendees;
     }
 
     public static class ExtendedProperties {
