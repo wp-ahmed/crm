@@ -1,4 +1,4 @@
-package site.easy.to.build.crm.google.dao;
+package site.easy.to.build.crm.google.model.calendar;
 
 import java.util.List;
 
