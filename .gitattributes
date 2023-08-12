@@ -2,3 +2,4 @@
 *.svg linguist-vendored
 *.html linguist-vendored
 *.css linguist-vendored
+/js/library/** linguist-vendored
