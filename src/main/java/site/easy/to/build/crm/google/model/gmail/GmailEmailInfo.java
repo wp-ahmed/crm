@@ -17,7 +17,6 @@ public class GmailEmailInfo {
     private String body;
     private String senderName;
 
-//    @NotBlank(message = "Email is required")
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email address")
     private String recipient;
