@@ -8041,7 +8041,7 @@ wysihtml5.views.View = Base.extend(
       // Create hidden field which tells the server after submit, that the user used an wysiwyg editor
       var hiddenField = document.createElement("input");
       hiddenField.type   = "hidden";
-      hiddenField.name   = "_wysihtml5_mode";
+      hiddenField.name   = "wysihtml5_mode";
       hiddenField.value  = 1;
 
       // Store reference to current wysihtml5 instance on the textarea element
