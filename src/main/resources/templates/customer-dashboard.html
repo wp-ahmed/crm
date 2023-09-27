@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{/general/head.html}"></div>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+
+<!-- Editable CSS -->
+<link rel="stylesheet" type="text/css"
+      th:href="@{/css/dataTables.bootstrap4.css}">
+<link rel="stylesheet" type="text/css"
+      th:href="@{/css/responsive.dataTables.min.css}">
+<!-- wysihtml5 CSS -->
+
+<link th:href="@{/css/tagify.css}" rel="stylesheet" type="text/css" />
+<!--    <link  />-->
+<link rel="stylesheet" th:href="@{/css/bootstrap-wysihtml5.css}"/>
+<!-- Custom CSS -->
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!-- page css -->
+<link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="skin-blue fixed-layout">
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">CRM</p>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/header.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/left-sidebar.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div th:insert="~{/general/page-titles.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+
+            <!-- ============================================================== -->
+            <!-- Info box -->
+            <!-- ============================================================== -->
+            <div class="card-group">
+                <!-- Column -->
+                <!-- Column -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h3><i class="fas fa-ticket-alt"></i></h3>
+                                        <p class="text-muted">Tickets</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h2 class="counter text-cyan" th:text="${countTickets}"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="progress">
+                                    <div class="progress-bar bg-cyan" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h3><i class="fas fa-file-contract"></i></h3>
+                                        <p class="text-muted">Contracts</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h2 class="counter text-purple" th:text="${countContracts}"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="progress">
+                                    <div class="progress-bar bg-purple" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h3><i class="fas fa-pencil-alt"></i></h3>
+                                        <p class="text-muted">Leads</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h2 class="counter text-success" th:text="${countLeads}"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Info box -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">My Tickets</h4>
+                                <div class="table-responsive m-t-40">
+                                    <table id="config-table" class="table table-hover no-wrap">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Subject</th>
+                                            <th>priority</th>
+                                            <th>Status</th>
+                                            <th>Employee</th>
+                                            <th>Employee Email</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${tickets != null}" th:each="ticket : ${tickets}">
+                                            <td th:text="${ticket.ticketId}"></td>
+                                            <td th:text="${ticket.subject}"></td>
+                                            <td th:text="${ticket.priority}"></td>
+                                            <td th:text="${ticket.status}"></td>
+                                            <td th:text="${ticket.employee.username}"></td>
+                                            <td th:text="${ticket.employee.email}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">My Leads</h4>
+                                <div class="table-responsive m-t-40">
+                                    <table id="config-table1" class="table table-hover no-wrap">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Lead</th>
+                                            <th>phone</th>
+                                            <th>Status</th>
+                                            <th>Employee</th>
+                                            <th>Employee Email</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${leads != null}" th:each="lead : ${leads}">
+                                            <td th:text="${lead.leadId}"></td>
+                                            <td th:text="${lead.name}"></td>
+                                            <td th:text="${lead.phone}"></td>
+                                            <td th:text="${lead.status}"></td>
+                                            <td th:text="${lead.employee.username}"></td>
+                                            <td th:text="${lead.employee.email}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">My Contracts</h4>
+                                <div class="table-responsive m-t-40">
+                                    <table id="config-table4" class="table table-hover no-wrap">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Subject</th>
+                                            <th>Status</th>
+                                            <th>Employee</th>
+                                            <th>Employee Email</th>
+                                            <th>Start date</th>
+                                            <th>End date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${contracts != null}" th:each="contract : ${contracts}">
+                                            <td th:text="${contract.contractId}"></td>
+                                            <td th:text="${contract.subject}"></td>
+                                            <td th:text="${contract.status}"></td>
+                                            <td th:text="${contract.user.username}"></td>
+                                            <td th:text="${contract.user.email}"></td>
+                                            <td th:text="${contract.startDate}"></td>
+                                            <td th:text="${contract.endDate}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MODAL -->
+            <!-- ============================================================== -->
+            <!-- End Page Content -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right sidebar -->
+            <!-- ============================================================== -->
+            <!-- .right-sidebar -->
+            <div th:insert="~{/general/right-sidebar.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Right sidebar -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/footer.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript"></script>
+<!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/popper.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript"></script>
+<!--    &lt;!&ndash; slimscrollbar scrollbar JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/perfect-scrollbar.jquery.min.js}" type="text/javascript">></script>
+<!--Wave Effects -->
+<script th:src="@{/js/library/waves.js}" type="text/javascript"></script>
+<!--Menu sidebar -->
+<script th:src="@{/js/library/sidebarmenu.js}" type="text/javascript"></script>
+<!--stickey kit -->
+<script th:src="@{/js/library/sticky-kit.min.js}"></script>
+<script th:src="@{/js/library/jquery.sparkline.min.js}" type="text/javascript"></script>
+<!--Custom JavaScript -->
+<script th:src="@{/js/library/custom.min.js}" type="text/javascript"></script>
+<script  th:src="@{/js/library/jquery-ui.min.js}"></script>
+
+</body>
+
+</html>
