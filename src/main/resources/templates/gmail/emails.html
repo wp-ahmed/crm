@@ -78,22 +78,22 @@
                                                     <tbody>
                                                     <tr th:each="email : ${emails}" th:class="${email.read == true ? 'read' : 'unread'}">
                                                             <td style="width:40px">
-                                                                <a th:href="'/gmail/email-details/' + ${email.id}">
+                                                                <a th:href="'/crm/gmail/email-details/' + ${email.id}">
                                                                 <div class="custom-control custom-checkbox mr-sm-2">
                                                                     <input type="checkbox" class="custom-control-input" th:id="'checkbox0' + ${email.id}" th:value="${email.id}" name="emailIds" />
                                                                     <label class="custom-control-label" th:for="'checkbox0' + ${email.id}"></label>
                                                                 </div>
                                                                 </a>
                                                             </td>
-                                                        <td style="width:40px" class="hidden-xs-down"><a th:href="'/gmail/email-details/' + ${email.id}"><i class="fa fa-star-o"></i></a></td>
+                                                        <td style="width:40px" class="hidden-xs-down"><a th:href="'/crm/gmail/email-details/' + ${email.id}"><i class="fa fa-star-o"></i></a></td>
                                                         <td class="hidden-xs-down"><a th:text="${email.sender}" th:href="'/gmail/email-details/' + ${email.id}"></a></td>
                                                             <td class="max-texts">
-                                                                <a th:href="'/gmail/email-details/' + ${email.id}">
+                                                                <a th:href="'/crm/gmail/email-details/' + ${email.id}">
                                                                     <span class="label label-info m-r-10">Work</span>
                                                                     <span th:text="${email.subject}"></span>
                                                                 </a>
                                                             </td>
-                                                            <td class="hidden-xs-down"><a th:href="'/gmail/email-details/' + ${email.id}"><i class="fa fa-paperclip"></i></a></td>
+                                                            <td class="hidden-xs-down"><a th:href="'/crm/gmail/email-details/' + ${email.id}"><i class="fa fa-paperclip"></i></a></td>
 <!--                                                            <td class="text-right">12:30 PM</td>-->
                                                         </tr>
                                                     </tbody>
@@ -185,7 +185,7 @@ $(document).ready(function() {
       let bid = $("#cardBody");
       bid.append(preLoad);
     // Fetch the email list using AJAX
-    $.getJSON(`/gmail/emails-json?page=${page}`, function(emailsPerPage) {
+    $.getJSON(`/crm/gmail/emails-json?page=${page}`, function(emailsPerPage) {
       // Update the table content
       let tableBody = $("table tbody");
       tableBody.empty();
@@ -202,13 +202,13 @@ $(document).ready(function() {
               </div>
             </td>
             <td style="width:40px" class="hidden-xs-down"><i class="fa fa-star-o"></i></td>
-            <td class="hidden-xs-down"><a href="/gmail/email-details/${email.id}">${email.sender}</a>></td>
+            <td class="hidden-xs-down"><a href="/crm/gmail/email-details/${email.id}">${email.sender}</a>></td>
             <td class="max-texts">
-              <a href="/gmail/email-details/${email.id}">
+              <a href="/crm/gmail/email-details/${email.id}">
                 <span>${email.subject}</span>
               </a>
             </td>
-            <td class="hidden-xs-down"><a href="/gmail/email-details/${email.id}"><i class="fa fa-paperclip"></i></a></td>
+            <td class="hidden-xs-down"><a href="/crm/gmail/email-details/${email.id}"><i class="fa fa-paperclip"></i></a></td>
           </tr>
         `;
 
