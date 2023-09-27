@@ -86,19 +86,19 @@
                                                     </td>
                                                     <td style="width:40px" class="hidden-xs-down"><i class="fa fa-star-o"></i></td>
                                                     <td class="hidden-xs-down">
-                                                        <a th:if="${label=='draft'}" th:href="'/gmail/send-draft/' + ${email.draftId}">
+                                                        <a th:if="${label=='draft'}" th:href="'/crm/gmail/send-draft/' + ${email.draftId}">
                                                             <span th:text="${email.recipient}"></span>
                                                         </a>
-                                                        <a th:if="${label!='draft'}" th:href="'/gmail/email-details/' + ${email.id}">
+                                                        <a th:if="${label!='draft'}" th:href="'/crm/gmail/email-details/' + ${email.id}">
                                                             <span th:text="${email.recipient}"></span>
                                                         </a>
                                                     </td>
                                                     <td class="max-texts">
-                                                        <a th:if="${label=='draft'}" th:href="'/gmail/send-draft/' + ${email.draftId}">
+                                                        <a th:if="${label=='draft'}" th:href="'/crm/gmail/send-draft/' + ${email.draftId}">
 <!--                                                            <span class="label label-info m-r-10">Work</span>-->
                                                             <span th:text="${email.subject}"></span>
                                                         </a>
-                                                        <a th:if="${label!='draft'}" th:href="'/gmail/email-details/' + ${email.id}">
+                                                        <a th:if="${label!='draft'}" th:href="'/crm/gmail/email-details/' + ${email.id}">
 <!--                                                            <span class="label label-info m-r-10">Work</span>-->
                                                             <span th:text="${email.subject}"></span>
                                                         </a>
