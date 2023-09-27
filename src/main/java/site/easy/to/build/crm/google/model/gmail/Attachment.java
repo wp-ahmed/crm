@@ -16,6 +16,12 @@ public class Attachment {
         this.size = size;
     }
 
+    public Attachment(String name, String data, String mimeType) {
+        this.name = name;
+        this.data = data;
+        this.mimeType = mimeType;
+    }
+
     public String getName() {
         return name;
     }
