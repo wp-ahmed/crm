@@ -47,7 +47,7 @@
 <div class="preloader">
     <div class="loader">
         <div class="loader__figure"></div>
-        <p class="loader__label">Elite admin</p>
+        <p class="loader__label">CRM</p>
     </div>
 </div>
 <!-- ============================================================== -->
@@ -91,7 +91,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h3>Create File</h3>
-                            <form  th:action="@{/drive/create-file}" th:object="${file}" method="post">
+                            <form  th:action="@{/crm/drive/create-file}" th:object="${file}" method="post">
                                 <div class="form-group">
                                     <label for="FileName">File Name:</label>
                                     <input type="text" class="form-control" id="FileName" name="name" th:field="*{name}" required>
