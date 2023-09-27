@@ -1,48 +1,58 @@
 package site.easy.to.build.crm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.groups.Default;
+import site.easy.to.build.crm.customValidations.user.UniqueEmail;
+import site.easy.to.build.crm.customValidations.user.UniqueUsername;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
+    public interface ValidationGroupInclusion {}
+    public interface RegistrationValidation {}
+    public interface SetEmployeePasswordValidation {}
+    public interface ManagerUpdateValidationGroupInclusion {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
+    @NotBlank(message = "Username is required", groups = {RegistrationValidation.class})
+    @UniqueUsername(groups = {RegistrationValidation.class})
     private String username;
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
 
     @Column(name = "email")
+    @NotBlank(message = "Email is required", groups = {Default.class, ValidationGroupInclusion.class, RegistrationValidation.class})
+    @Email(message = "Please enter a valid email format", groups = {Default.class, ValidationGroupInclusion.class, RegistrationValidation.class})
+    @UniqueEmail(groups = {Default.class, ValidationGroupInclusion.class, RegistrationValidation.class})
     private String email;
 
+
     @Column(name = "password")
+    @NotBlank(message = "Password is required", groups = {RegistrationValidation.class,SetEmployeePasswordValidation.class})
     private String password;
 
-    @Column(name = "phone")
-    private String phone;
+    @Column(name = "status")
+    @NotBlank(message = "Status is required", groups = {Default.class, ValidationGroupInclusion.class,ManagerUpdateValidationGroupInclusion.class})
+    @Pattern(regexp = "^(active|inactive|suspended)$", message = "Invalid status",
+            groups = {Default.class, ValidationGroupInclusion.class, ManagerUpdateValidationGroupInclusion.class})
+    private String status;
 
-    @Column(name = "department")
-    private String department;
+    @Column(name = "token")
+    private String token;
 
     @Column(name = "hire_date")
     private LocalDate hireDate;
-
-    @Column(name = "salary")
-    private BigDecimal salary;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private Status status;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -50,31 +60,47 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public enum Status {
-        ACTIVE, INACTIVE, TERMINATED
-    }
+    @Column(name = "is_password_set")
+    private boolean isPasswordSet;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
     @PrimaryKeyJoinColumn
     private OAuthUser oauthUser;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @NotEmpty(message = "At least one role must be selected")
+    private List<Role> roles;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private UserProfile userProfile;
+
+
+
     public User() {
 
     }
 
-    public User(String username, String firstName, String lastName, String email, String password, String phone, String department, LocalDate hireDate, BigDecimal salary, Status status, LocalDateTime createdAt, LocalDateTime updatedAt, OAuthUser oauthUsers) {
+    public User(String username, String email, String password, LocalDate hireDate, LocalDateTime createdAt, LocalDateTime updatedAt,
+                OAuthUser oauthUser, List<Role> roles, String status, String token, boolean isPasswordSet, UserProfile userProfile) {
         this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.phone = phone;
-        this.department = department;
         this.hireDate = hireDate;
-        this.salary = salary;
-        this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.oauthUser = oauthUsers;
+        this.oauthUser = oauthUser;
+        this.roles = roles;
+        this.status = status;
+        this.token = token;
+        this.isPasswordSet = isPasswordSet;
+        this.userProfile = userProfile;
     }
 
     public Integer getId() {
@@ -93,22 +119,6 @@ public class User {
         this.username = username;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -125,20 +135,20 @@ public class User {
         this.password = password;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getStatus() {
+        return status;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getToken() {
+        return token;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public LocalDate getHireDate() {
@@ -149,20 +159,12 @@ public class User {
         this.hireDate = hireDate;
     }
 
-    public BigDecimal getSalary() {
-        return salary;
+    public boolean isPasswordSet() {
+        return isPasswordSet;
     }
 
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setPasswordSet(boolean passwordSet) {
+        isPasswordSet = passwordSet;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -188,5 +190,33 @@ public class User {
     public void setOauthUser(OAuthUser oauthUser) {
         this.oauthUser = oauthUser;
     }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(Role role){
+        this.roles.remove(role);
+    }
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isInactiveUser() {
+        return this.status.equals("inactive");
+    }
+
 }
 
