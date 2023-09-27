@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{/general/head.html}"></div>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<link rel="stylesheet" th:href="@{/css/bootstrap-wysihtml5.css}"/>
+<!-- Editable CSS -->
+
+<!-- Custom CSS -->
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!-- page css -->
+<link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="skin-blue fixed-layout">
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">CRM</p>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/header.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/left-sidebar.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div th:insert="~{/general/page-titles.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-lg-4 col-xlg-3 col-md-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <center class="m-t-30"> <img th:src="@{/images/pp.png}" class="img-circle" width="150" />
+                                <h4 class="card-title m-t-10" th:text="${customer.name}"></h4>
+                                <h6 class="card-subtitle" th:text="${customer.position}"></h6>
+                            </center>
+                        </div>
+                        <div>
+                            <hr>
+                        </div>
+                        <div class="card-body">
+                            <small class="text-muted">Email address </small>
+                            <h6 th:text="${customer.email}"></h6>
+                            <small class="text-muted p-t-30 db">Phone</small>
+                            <h6 th:text="${customer.phone}"></h6>
+                            <small class="text-muted p-t-30 db">Address</small>
+                            <h6 th:text="${customer.address}"></h6>
+                            <small class="text-muted p-t-30 db">Social Profile</small>
+                            <br/>
+                            <a th:href="${customer.facebook}" target="_blank"><button class="btn btn-circle btn-secondary"><i class="fab fa-facebook-f"></i></button></a>
+                            <a th:href="${customer.twitter}" target="_blank"><button class="btn btn-circle btn-secondary"><i class="fab fa-twitter"></i></button></a>
+                            <a th:href="${customer.youtube}" target="_blank"><button class="btn btn-circle btn-secondary"><i class="fab fa-youtube"></i></button></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <div class="col-lg-8 col-xlg-9 col-md-7">
+                    <div class="card">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs profile-tab" role="tablist">
+                            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <!--second tab-->
+                            <div class="tab-pane active" id="profile" role="tabpanel">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3 col-xs-6 b-r"> <strong>Full Name</strong>
+                                            <br>
+                                            <p class="text-muted" th:text="${customer.name}"></p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6 b-r"> <strong>Mobile</strong>
+                                            <br>
+                                            <p class="text-muted" th:text="${customer.phone}"></p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6 b-r"> <strong>Email</strong>
+                                            <br>
+                                            <p class="text-muted" th:text="${customer.email}"></p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6"> <strong>Location</strong>
+                                            <br>
+                                            <p class="text-muted" th:text="${customer.country}"></p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <p class="m-t-30" th:utext="${customer.description}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Page Content -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right sidebar -->
+            <!-- ============================================================== -->
+            <!-- .right-sidebar -->
+            <div th:insert="~{/general/right-sidebar.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Right sidebar -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/footer.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; slimscrollbar scrollbar JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/perfect-scrollbar.jquery.min.js}" type="text/javascript">></script>
+<!--Wave Effects -->
+<script th:src="@{/js/library/waves.js}" type="text/javascript">></script>
+<!--Menu sidebar -->
+<script th:src="@{/js/library/sidebarmenu.js}" type="text/javascript">></script>
+<!--stickey kit -->
+<script th:src="@{/js/library/sticky-kit.min.js}"></script>
+<script th:src="@{/js/library/jquery.sparkline.min.js}" type="text/javascript">></script>
+<!--Custom JavaScript -->
+<script th:src="@{/js/library/custom.min.js}" type="text/javascript">></script>
+<!-- Editable -->
+
+<script th:src="@{/js/library/wysihtml5-0.3.0.js}"></script>
+<script th:src="@{/js/library/bootstrap-wysihtml5.js}"></script>
+</body>
+</html>
