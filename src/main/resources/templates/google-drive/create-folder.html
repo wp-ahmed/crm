@@ -47,7 +47,7 @@
 <div class="preloader">
     <div class="loader">
         <div class="loader__figure"></div>
-        <p class="loader__label">Elite admin</p>
+        <p class="loader__label">CRM</p>
     </div>
 </div>
 <!-- ============================================================== -->
@@ -93,7 +93,7 @@
                             <h1>Google Drive</h1>
                             <hr>
                             <h3>Create Folder</h3>
-                            <form th:object="${folder}" th:action="@{/drive/create-folder}" method="post">
+                            <form th:object="${folder}" th:action="@{/crm/drive/create-folder}" method="post">
                                 <div class="form-group">
                                     <label for="name">Folder Name:</label>
                                     <input type="text" class="form-control" id="name" th:field="*{name}" name="name" required>
