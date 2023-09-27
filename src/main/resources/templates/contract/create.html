@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{/general/head.html}"></div>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<link rel="stylesheet" th:href="@{/css/bootstrap-wysihtml5.css}"/>
+<!-- Editable CSS -->
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
+<link th:href="@{/css/bootstrap-material-datetimepicker.css}" rel="stylesheet">
+
+<link th:href="@{/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css"/>
+
+<link th:href="@{/css/jquery-clockpicker.min.css}" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!-- page css -->
+<link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="skin-blue fixed-layout">
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">CRM</p>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/header.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/left-sidebar.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div th:insert="~{/general/page-titles.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Create New Contract</h4>
+                            <form th:object="${contract}" th:action="@{/crm/contract/create}"
+                                  enctype="multipart/form-data" id="email-form" method="post">
+                                <input type="hidden" id="allFiles" name="allFiles">
+
+                                <label class="m-t-20" for="subject">Subject:</label>
+                                <div class="input-group">
+                                    <input type="text" id="subject" th:field="*{subject}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('subject')}"
+                                          th:errors="*{subject}"></span>
+                                </div>
+
+                                <label class="m-t-20" for="status">status:</label>
+                                <div class="input-group">
+                                    <select id="status" th:field="*{status}" class="form-control">
+                                        <option value="expired">Expired</option>
+                                        <option value="canceled">Canceled</option>
+                                        <option value="archived">Archived</option>
+                                        <option value="active">Active</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('status')}"
+                                          th:errors="*{status}"></span>
+                                </div>
+
+                                <label class="m-t-20" for="startDate">Start Date:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" th:field="*{startDate}"
+                                           placeholder="2017-06-04" id="startDate">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('startDate')}"
+                                          th:errors="*{startDate}"></span>
+                                </div>
+                                <div class="input-group" th:if="${#fields.hasGlobalErrors()}">
+                                  <span class="text-danger font-weight-bold" th:each="error : ${#fields.globalErrors()}"
+                                        th:text="${error}">
+                                    <span class="text-danger font-weight-bold"
+                                          th:if="${error.contains('StartDateBeforeEndDate')}" th:text="${error}">
+                                    </span>
+                                  </span>
+                                </div>
+                                <label class="m-t-20" for="endDate">End Date:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" th:field="*{endDate}"
+                                           placeholder="2017-06-04" id="endDate">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('endDate')}"
+                                          th:errors="*{endDate}"></span>
+                                </div>
+
+                                <label class="m-t-20" for="amount">Amount:</label>
+                                <div class="input-group">
+                                    <input type="text" id="amount" th:field="*{amount}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('amount')}"
+                                          th:errors="*{amount}"></span>
+                                </div>
+
+                                <label class="m-t-20" for="customerId">Customer:</label>
+                                <div class="input-group">
+                                    <select name="customerId" id="customerId" class="form-control">
+                                        <option th:each="customer : ${customers}" th:text="${customer.name}"
+                                                th:value="${customer.customerId}"></option>
+                                    </select>
+                                </div>
+
+                                <label class="m-t-20" for="description">Description:</label>
+                                <div class="input-group">
+                                    <textarea class="textarea_editor form-control" id="description" rows="15"
+                                              placeholder="Enter text ..." th:field="*{description}"></textarea>
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold"
+                                          th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+                                          autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20"><i class="ti-link"></i> Attachment</label>
+                                <div class="form-group">
+                                    <div class="dropzone" id="my-dropzone"></div>
+                                </div>
+                                <div th:if="${hasGoogleDriveAccess}"
+                                     class="col-md-5 m-b-15 custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input trigger-emails"
+                                           th:id="googleDrive" th:field="*{googleDrive}">
+                                    <label th:for="googleDrive" class="custom-control-label">Upload Docs to your Google
+                                        Drive</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary m-t-20">Create Contract</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${hasGoogleDriveAccess}" class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Create New Google Drive Folder</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post">
+                                <input type="hidden" id="id" name="id" class="form-control">
+                                <label for="folderName" class="m-t-20">Folder Name</label>
+                                <div class="input-group">
+                                    <input id="folderName" class="form-control">
+                                </div>
+                                <div class="input-group m-t-10">
+                                    <span id="emailErrors" class="text-danger font-weight-bold"></span>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="create">Create</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page Content -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right sidebar -->
+            <!-- ============================================================== -->
+            <!-- .right-sidebar -->
+            <div th:insert="~{/general/right-sidebar.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Right sidebar -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/footer.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; slimscrollbar scrollbar JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/perfect-scrollbar.jquery.min.js}" type="text/javascript">></script>
+<!--Wave Effects -->
+<script th:src="@{/js/library/waves.js}" type="text/javascript">></script>
+<!--Menu sidebar -->
+<script th:src="@{/js/library/sidebarmenu.js}" type="text/javascript">></script>
+<!--stickey kit -->
+<script th:src="@{/js/library/sticky-kit.min.js}"></script>
+<script th:src="@{/js/library/jquery.sparkline.min.js}" type="text/javascript">></script>
+<!--Custom JavaScript -->
+<script th:src="@{/js/library/moment.js}"></script>
+<script th:src="@{/js/library/jquery-clockpicker.min.js}"></script>
+<script th:src="@{/js/library/custom.min.js}" type="text/javascript">></script>
+<!-- Editable -->
+
+<script th:src="@{/js/library/wysihtml5-0.3.0.js}"></script>
+<script th:src="@{/js/library/bootstrap-wysihtml5.js}"></script>
+<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+<script>
+    Dropzone.autoDiscover = false;
+    $(document).ready(function() {
+        $('.textarea_editor').wysihtml5();
+    });
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var existingFiles = /*[[${attachments}]]*/ 'default';
+    var folders = /*[[${folders}]]*/ 'default';
+    var driveFolderId = "";
+
+    /*]]>*/
+</script>
+<script th:src="@{/js/library/bootstrap-material-datetimepicker.js}"></script>
+<script th:src="@{/js/library/bootstrap-datepicker.min.js}"></script>
+<script>
+    // MAterial Date picker
+    $('#startDate, #endDate').bootstrapMaterialDatePicker({ weekStart: 0, time: false });
+    $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
+    $('#date-format').bootstrapMaterialDatePicker({ format: 'dddd DD MMMM YYYY - HH:mm' });
+
+    $('#min-date').bootstrapMaterialDatePicker({ format: 'DD/MM/YYYY HH:mm', minDate: new Date() });
+</script>
+<script th:src="@{/js/general-dropzone.js}" type="text/javascript"
+        th:data-csrf-token="${_csrf.token}" th:data-csrf-header="${_csrf.headerName}"></script>
+</body>
+</html>
