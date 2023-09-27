@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{/general/head.html}"></div>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<link rel="stylesheet" th:href="@{/css/bootstrap-wysihtml5.css}"/>
+<!-- Editable CSS -->
+
+<!-- Custom CSS -->
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!-- page css -->
+<link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+
+<link th:href="@{/css/ribbon-page.css}" rel="stylesheet">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="skin-blue fixed-layout">
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">CRM</p>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/header.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/left-sidebar.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div th:insert="~{/general/page-titles.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Create Customer</h4>
+                            <form th:object="${customer}" th:action="@{/crm/customer/create-customer}" method="post">
+
+                                <label class="m-t-20" for="name">name:</label>
+                                <div class="input-group">
+                                    <input type="text" id="name" th:field="*{name}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20" for="email">Email:</label>
+                                <div class="input-group">
+                                    <input type="email" id="email" th:field="*{email}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20" for="position">Position:</label>
+                                <div class="input-group">
+                                    <input type="text" id="position" th:field="*{position}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('position')}" th:errors="*{position}" autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20" for="phone">Phone:</label>
+                                <div class="input-group">
+                                    <input type="text" id="phone" th:field="*{phone}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20" for="address">Address:</label>
+                                <div class="input-group">
+                                    <input type="text" id="address" th:field="*{address}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('address')}" th:errors="*{address}" autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20" for="city">City:</label>
+                                <div class="input-group">
+                                    <input type="text" id="city" th:field="*{city}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('city')}" th:errors="*{city}" autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20" for="state">State:</label>
+                                <div class="input-group">
+                                    <input type="text" id="state" th:field="*{state}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('state')}" th:errors="*{state}" autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20" for="country">Country:</label>
+                                <div class="input-group">
+                                    <input type="text" id="country" th:field="*{country}" class="form-control">
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('country')}" th:errors="*{country}" autocomplete="off"></span>
+                                </div>
+
+                                <label class="m-t-20" for="description">Information:</label>
+                                <div class="input-group">
+                                    <textarea class="textarea_editor form-control" id="description" rows="15" placeholder="Enter text ..." th:field="*{description}"></textarea>
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" autocomplete="off"></span>
+                                </div>
+                                <div class="input-group" th:if="${isGoogleUser && hasGoogleGmailAccess}">
+                                    <input type="checkbox" id="sendEmail" name="SendEmail">
+                                    <label for="sendEmail" class="m-b-0 m-l-5">Send customer a registration link</label>
+                                </div>
+                                <div th:if="${!isGoogleUser}" class="ribbon-wrapper card">
+                                    <div class="ribbon ribbon-danger">Email Service</div>
+                                    <p class="ribbon-content">To send emails customer a registration link, please log in with
+                                        your <a href="/oauth2/authorization/google" target="_blank">Google account</a></p>
+                                </div>
+                                <div th:if="${isGoogleUser && !hasGoogleGmailAccess}" class="ribbon-wrapper card">
+                                    <div class="ribbon ribbon-danger">Gmail Access</div>
+                                    <p class="ribbon-content">In order to send customer a registration link, you have to grant the app access to your <a
+                                            href="/crm/settings/google-services" target="_blank">Gmail account</a>
+                                    </p>
+                                </div>
+                                <button type="submit" class="btn btn-primary m-t-20">Create Customer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Page Content -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right sidebar -->
+            <!-- ============================================================== -->
+            <!-- .right-sidebar -->
+            <div th:insert="~{/general/right-sidebar.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Right sidebar -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/footer.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; slimscrollbar scrollbar JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/perfect-scrollbar.jquery.min.js}" type="text/javascript">></script>
+<!--Wave Effects -->
+<script th:src="@{/js/library/waves.js}" type="text/javascript">></script>
+<!--Menu sidebar -->
+<script th:src="@{/js/library/sidebarmenu.js}" type="text/javascript">></script>
+<!--stickey kit -->
+<script th:src="@{/js/library/sticky-kit.min.js}"></script>
+<script th:src="@{/js/library/jquery.sparkline.min.js}" type="text/javascript">></script>
+<!--Custom JavaScript -->
+<script th:src="@{/js/library/custom.min.js}" type="text/javascript">></script>
+<!-- Editable -->
+
+<script th:src="@{/js/library/wysihtml5-0.3.0.js}"></script>
+<script th:src="@{/js/library/bootstrap-wysihtml5.js}"></script>
+<script>
+    $(document).ready(function() {
+        $('.textarea_editor').wysihtml5();
+    });
+</script>
+
+</body>
+</html>
