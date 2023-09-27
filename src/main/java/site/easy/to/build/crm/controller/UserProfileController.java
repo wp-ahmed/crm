@@ -17,6 +17,7 @@ import site.easy.to.build.crm.util.AuthenticationUtils;
 @RequestMapping("/crm/profile")
 public class UserProfileController {
 
+
     private final UserService userService;
     private final UserProfileService userProfileService;
     private final AuthenticationUtils authenticationUtils;
