@@ -74,7 +74,7 @@
                             <div class="col-xlg-2 col-lg-3 col-md-4" th:insert="~{/gmail/template/side-bar-labels.html}"></div>
                             <div class="col-xlg-10 col-lg-9 col-md-8 bg-light border-left">
                                 <div class="card-body">
-                                    <form id="email-form" th:action="@{/gmail/send}" th:object="${emailForm}" method="post">
+                                    <form id="email-form" th:action="@{/crm/gmail/send}" th:object="${emailForm}" method="post">
                                         <input type="hidden" id="allFiles" name="allFiles">
                                         <input type="hidden" id="draftId" name="draftId" th:field="*{draftId}">
                                         <input type="hidden" id="id" name="id" th:field="*{id}">
