@@ -4,13 +4,29 @@
 <div th:insert="~{/general/head.html}"></div>
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
+
+<!-- Editable CSS -->
+<link rel="stylesheet" type="text/css"
+      th:href="@{/css/dataTables.bootstrap4.css}">
+<link rel="stylesheet" type="text/css"
+      th:href="@{/css/responsive.dataTables.min.css}">
 <!-- wysihtml5 CSS -->
+<link th:href="@{/css/fullcalendar.css}" rel="stylesheet" />
+<link th:href="@{/css/bootstrap-material-datetimepicker.css}" rel="stylesheet">
+
+<link th:href="@{/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css" />
+
+<link th:href="@{/css/jquery-clockpicker.min.css}" rel="stylesheet">
+
+<link th:href="@{/css/tagify.css}" rel="stylesheet" type="text/css" />
 <!--    <link  />-->
 <link rel="stylesheet" th:href="@{/css/bootstrap-wysihtml5.css}"/>
 <!-- Custom CSS -->
 <link th:href="@{/css/style.min.css}" rel="stylesheet">
 <!-- page css -->
 <link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+
+<link th:href="@{/css/ribbon-page.css}" rel="stylesheet">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -62,18 +78,338 @@
             <!-- ============================================================== -->
             <!-- End Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Start Page Content -->
-            <!-- ============================================================== -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="row">
 
+            <!-- ============================================================== -->
+            <!-- Info box -->
+            <!-- ============================================================== -->
+            <div class="card-group">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h3><i class="fas fa-users"></i></h3>
+                                        <p class="text-muted">MYNEW CLIENTS</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h2 class="counter text-primary" th:text="${countCustomers}"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h3><i class="fas fa-ticket-alt"></i></h3>
+                                        <p class="text-muted">Tickets</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h2 class="counter text-cyan" th:text="${countTickets}"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="progress">
+                                    <div class="progress-bar bg-cyan" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h3><i class="fas fa-file-contract"></i></h3>
+                                        <p class="text-muted">Contracts</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h2 class="counter text-purple" th:text="${countContracts}"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="progress">
+                                    <div class="progress-bar bg-purple" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Column -->
+                <!-- Column -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="d-flex no-block align-items-center">
+                                    <div>
+                                        <h3><i class="fas fa-pencil-alt"></i></h3>
+                                        <p class="text-muted">Leads</p>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <h2 class="counter text-success" th:text="${countLeads}"></h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- ============================================================== -->
+            <!-- End Info box -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Google Calendar</h4>
+                            <div class="card-body b-l m-b-30 p-0 calender-sidebar" th:if="${hasCalendarAccess}">
+                                <div id="calendar"></div>
+                            </div>
+                            <div th:if="${!isGoogleUser}" class="ribbon-wrapper card">
+                                <div class="ribbon ribbon-danger">Calendar Service</div>
+                                <p class="ribbon-content">To be able to display your Google calendar meeting, you have to login to
+                                    your <a href="/oauth2/authorization/google">Google account</a>  and Grant access to calendar service</p>
+                            </div>
+                            <div th:if="${isGoogleUser && !hasCalendarAccess}" class="ribbon-wrapper card">
+                                <div class="ribbon ribbon-danger">Calendar Access</div>
+                                <p class="ribbon-content">Please grant the app access to your <a
+                                        href="/settings/google-services">Google account</a> in order to see your Google Calendar.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-cyan text-white">
+                        <div class="card-body ">
+                            <div class="row weather">
+                                <div class="col-md-6 m-t-40">
+                                    <h3>&nbsp;</h3>
+                                    <div class="display-4"><span th:text="${weatherData.current.tempC}"></span><span><sup>°C</sup></span></div>
+                                    <p class="text-white" th:text="${weatherData.location.country}"></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <h1 class="m-b-"><i class="wi wi-day-cloudy-high"></i></h1>
+                                    <p class="op-5" th:text="${weatherData.location.localtime}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Recent Tickets</h4>
+                                <div class="table-responsive m-t-40">
+                                    <table id="config-table" class="table table-hover no-wrap">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Subject</th>
+                                            <th>priority</th>
+                                            <th>Status</th>
+                                            <th>Customer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${tickets != null}" th:each="ticket : ${tickets}">
+                                            <td th:text="${ticket.ticketId}"></td>
+                                            <td th:text="${ticket.subject}"></td>
+                                            <td th:text="${ticket.priority}"></td>
+                                            <td th:text="${ticket.status}"></td>
+                                            <td th:text="${ticket.customer.name}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Recent Leads</h4>
+                                <div class="table-responsive m-t-40">
+                                    <table id="config-table1" class="table table-hover no-wrap">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Lead</th>
+                                            <th>phone</th>
+                                            <th>Status</th>
+                                            <th>Customer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${leads != null}" th:each="lead : ${leads}">
+                                            <td th:text="${lead.leadId}"></td>
+                                            <td th:text="${lead.name}"></td>
+                                            <td th:text="${lead.phone}"></td>
+                                            <td th:text="${lead.status}"></td>
+                                            <td th:text="${lead.customer.name}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Recent Customers</h4>
+                                <div class="table-responsive m-t-40">
+                                    <table id="config-table2" class="table table-hover no-wrap">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Country</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${customers != null}" th:each="customer : ${customers}">
+                                            <td th:text="${customer.customerId}"></td>
+                                            <td th:text="${customer.name}"></td>
+                                            <td th:text="${customer.email}"></td>
+                                            <td th:text="${customer.phone}"></td>
+                                            <td th:text="${customer.country}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Recent Contracts</h4>
+                                <div class="table-responsive m-t-40">
+                                    <table id="config-table4" class="table table-hover no-wrap">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Subject</th>
+                                            <th>Status</th>
+                                            <th>Customer</th>
+                                            <th>Start date</th>
+                                            <th>End date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${contracts != null}" th:each="contract : ${contracts}">
+                                            <td th:text="${contract.contractId}"></td>
+                                            <td th:text="${contract.subject}"></td>
+                                            <td th:text="${contract.status}"></td>
+                                            <td th:text="${contract.customer.name}"></td>
+                                            <td th:text="${contract.startDate}"></td>
+                                            <td th:text="${contract.endDate}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+
+            <!-- BEGIN MODAL -->
+            <div class="modal none-border" id="my-event">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><strong>Add Event</strong></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success save-event waves-effect waves-light">Create event</button>
+                            <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-dismiss="modal">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Add Category -->
+            <div class="modal fade none-border" id="add-new-event">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><strong>Add</strong> a category</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="control-label">Category Name</label>
+                                        <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label">Choose Category Color</label>
+                                        <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
+                                            <option value="success">Success</option>
+                                            <option value="danger">Danger</option>
+                                            <option value="info">Info</option>
+                                            <option value="primary">Primary</option>
+                                            <option value="warning">Warning</option>
+                                            <option value="inverse">Inverse</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger waves-effect waves-light save-category" data-dismiss="modal">Save</button>
+                            <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END MODAL -->
             <!-- ============================================================== -->
             <!-- End Page Content -->
             <!-- ============================================================== -->
@@ -107,22 +443,37 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
-<script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript"></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
-<script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>
-<script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/popper.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript"></script>
 <!--    &lt;!&ndash; slimscrollbar scrollbar JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/perfect-scrollbar.jquery.min.js}" type="text/javascript">></script>
 <!--Wave Effects -->
-<script th:src="@{/js/library/waves.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/waves.js}" type="text/javascript"></script>
 <!--Menu sidebar -->
-<script th:src="@{/js/library/sidebarmenu.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/sidebarmenu.js}" type="text/javascript"></script>
 <!--stickey kit -->
 <script th:src="@{/js/library/sticky-kit.min.js}"></script>
-<script th:src="@{/js/library/jquery.sparkline.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/jquery.sparkline.min.js}" type="text/javascript"></script>
 <!--Custom JavaScript -->
-<script th:src="@{/js/library/custom.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/custom.min.js}" type="text/javascript"></script>
+<script th:inline="javascript">
+    var eventDisplays = /*[[${eventDisplays}]]*/ null;  // Assign the objectList to the JavaScript variable
+<!--      var startDateTime = new Date("2023-08-08T07:47:00+03:00");-->
+<!--    var x = new Date(event.startDate + "T" + event.startTime + event.timeZone);-->
+<!--    var y = new Date(event.endDate + "T" + event.endTime + event.timeZone);-->
 </script>
+<script  th:src="@{/js/library/jquery-ui.min.js}"></script>
+<script  th:src="@{/js/library/moment.js}"></script>
+<script  th:src="@{/js/library/fullcalendar.min.js}"></script>
+<script th:src="@{/js/library/jquery-clockpicker.min.js}"></script>
+<script th:src="@{/js/library/bootstrap-material-datetimepicker.js}"></script>
+<script th:src="@{/js/library/bootstrap-datepicker.min.js}"></script>
+
+<script th:src="@{/js/library/tagify.min.js}"></script>
+<script th:src="@{/js/library/tagify.polyfills.min.js}"></script>
+<script  th:src="@{/js/cal-init.js}" type="text/javascript" th:data-csrf-token="${_csrf.token}" th:data-csrf-header="${_csrf.headerName}"></script>
 </body>
 
 </html>
