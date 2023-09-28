@@ -1,4 +1,4 @@
-package site.easy.to.build.crm.google.customValidations;
+package site.easy.to.build.crm.customValidations;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
