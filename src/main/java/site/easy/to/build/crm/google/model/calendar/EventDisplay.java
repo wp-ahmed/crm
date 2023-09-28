@@ -1,11 +1,10 @@
 package site.easy.to.build.crm.google.model.calendar;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import site.easy.to.build.crm.google.customValidations.EndTimeAfterStartTime;
-import site.easy.to.build.crm.google.customValidations.FutureDate;
-import site.easy.to.build.crm.google.customValidations.SameDay;
+import site.easy.to.build.crm.customValidations.EndTimeAfterStartTime;
+import site.easy.to.build.crm.customValidations.FutureDate;
+import site.easy.to.build.crm.customValidations.SameDay;
 import site.easy.to.build.crm.google.util.TimeZoneLabel;
 
 
