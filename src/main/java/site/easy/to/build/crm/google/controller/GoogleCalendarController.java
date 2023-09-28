@@ -12,9 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import site.easy.to.build.crm.entity.Lead;
 import site.easy.to.build.crm.entity.OAuthUser;
+import site.easy.to.build.crm.entity.User;
 import site.easy.to.build.crm.google.model.calendar.*;
+import site.easy.to.build.crm.google.service.acess.GoogleAccessService;
 import site.easy.to.build.crm.google.service.calendar.GoogleCalendarApiService;
+import site.easy.to.build.crm.service.lead.LeadService;
+import site.easy.to.build.crm.service.user.UserService;
 import site.easy.to.build.crm.util.AuthenticationUtils;
 import site.easy.to.build.crm.google.util.TimeDateUtil;
 
@@ -28,17 +33,23 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller
-@RequestMapping("/calendar")
+@RequestMapping("/crm/calendar")
 public class GoogleCalendarController {
 
     final private GoogleCalendarApiService googleCalendarApiService;
 
     final private AuthenticationUtils authenticationUtils;
 
+    final private LeadService leadService;
+
+    final private UserService userService;
+
     @Autowired
-    public GoogleCalendarController(GoogleCalendarApiService googleCalendarApiService, AuthenticationUtils authenticationUtils) {
+    public GoogleCalendarController(GoogleCalendarApiService googleCalendarApiService, AuthenticationUtils authenticationUtils, LeadService leadService, UserService userService) {
         this.googleCalendarApiService = googleCalendarApiService;
         this.authenticationUtils = authenticationUtils;
+        this.leadService = leadService;
+        this.userService = userService;
     }
 
     @GetMapping("/list-events")
@@ -60,12 +71,12 @@ public class GoogleCalendarController {
     }
 
     @GetMapping("/create-event")
-    public String showCreateEventForm(Model model, Authentication authentication) {
+    public String showCreateEventForm(Model model, Authentication authentication, @RequestParam(value = "leadId", required = false) Integer leadId) {
         if((authentication instanceof UsernamePasswordAuthenticationToken)) {
             return "/google-error";
         }
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
-        if(!oAuthUser.getGrantedScopes().contains("https://www.googleapis.com/auth/drive.file")) {
+        if(!oAuthUser.getGrantedScopes().contains(GoogleAccessService.SCOPE_CALENDAR)) {
             String code = "403";
             String link = "/settings/google-services";
             String buttonText = "Grant Access";
@@ -76,15 +87,25 @@ public class GoogleCalendarController {
             model.addAttribute("code",code);
             return "gmail/error";
         }
+        //In case the current employee wanna schedule a meeting with a new registered / updated lead
+
+        String email = "";
+        if(leadId != null) {
+            Lead lead = leadService.findByLeadId(leadId);
+            email = lead.getCustomer().getEmail();
+        }
         EventDisplay eventDisplay = new EventDisplay();
         eventDisplay.setTimeZoneLabels(TimeDateUtil.getTimeZonesWithLabels());
         model.addAttribute("eventDisplay",eventDisplay);
+        model.addAttribute("email", email);
+        model.addAttribute("leadId", leadId);
         return "calendar/event-form";
     }
 
     @PostMapping("/create-event")
     public String createEvent(@ModelAttribute("eventDisplay") @Valid EventDisplay eventDisplay, BindingResult bindingResult,
-                              @RequestParam("emails") String emails, Authentication authentication, Model model) {
+                              @RequestParam("emails") String emails, Authentication authentication, Model model,
+                              @RequestParam(value = "leadId", required = false) Integer leadId) {
         if(bindingResult.hasErrors()){
             eventDisplay.setTimeZoneLabels(TimeDateUtil.getTimeZonesWithLabels());
             model.addAttribute("eventDisplay", eventDisplay);
@@ -126,11 +147,21 @@ public class GoogleCalendarController {
         event.setAttendees(attendees);
 
         try {
-            googleCalendarApiService.createEvent("primary", oAuthUser, event);
+            String calendarId = googleCalendarApiService.createEvent("primary", oAuthUser, event);
+
+            if(leadId != null) {
+                Lead lead = leadService.findByLeadId(leadId);
+                User employee = oAuthUser.getUser();
+                lead.setEmployee(employee);
+                lead.setStatus("Scheduled");
+                lead.setMeetingId(calendarId);
+                leadService.save(lead);
+            }
+
         } catch (IOException | GeneralSecurityException e) {
             return handleGoogleCalendarApiException(model,e);
         }
-        return "redirect:/calendar/list-events";
+        return "redirect:/crm/calendar/list-events";
     }
 
     @PostMapping("/ajax-create-event")
@@ -141,7 +172,7 @@ public class GoogleCalendarController {
         HashMap<String, String> errors = getStringStringHashMap(fullStartDate, fullEndDate, summary);
         if(!errors.isEmpty()){
             ObjectMapper objectMapper = new ObjectMapper();
-            String json = null;
+            String json;
             try {
                 json = objectMapper.writeValueAsString(errors);
             } catch (JsonProcessingException e) {
@@ -179,7 +210,7 @@ public class GoogleCalendarController {
         }
         event.setAttendees(attendees);
 
-        String eventId = "";
+        String eventId;
 
         try {
             eventId = googleCalendarApiService.createEvent("primary", oAuthUser, event);
@@ -269,7 +300,7 @@ public class GoogleCalendarController {
         } catch (IOException | GeneralSecurityException e) {
             return handleGoogleCalendarApiException(model,e);
         }
-        return "redirect:/calendar/list-events";
+        return "redirect:/crm/calendar/list-events";
     }
 
     @RequestMapping("/ajax-delete-event")
