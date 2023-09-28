@@ -18,8 +18,9 @@ import site.easy.to.build.crm.entity.User;
 import site.easy.to.build.crm.google.config.GoogleApiProperties;
 import site.easy.to.build.crm.google.config.GoogleAuthorizationCodeFlowWrapper;
 import site.easy.to.build.crm.google.service.drive.GoogleDriveApiService;
-import site.easy.to.build.crm.service.OAuthUserService;
-import site.easy.to.build.crm.service.UserService;
+import site.easy.to.build.crm.service.user.OAuthUserService;
+import site.easy.to.build.crm.service.user.UserService;
+import site.easy.to.build.crm.util.AuthenticationUtils;
 import site.easy.to.build.crm.util.SessionUtils;
 import site.easy.to.build.crm.google.util.StringSetWrapper;
 
@@ -34,17 +35,17 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
     private final UserService userService;
     private final OAuthUserService oAuthUserService;
     private final GoogleApiProperties googleApiProperties;
-
     private final GoogleAuthorizationCodeFlowWrapper googleAuthorizationCodeFlowWrapper;
-
     private final GoogleDriveApiService googleDriveApiService;
+    private final AuthenticationUtils authenticationUtils;
 
-    public GoogleAccessServiceImpl(UserService userService, OAuthUserService oAuthUserService, GoogleApiProperties googleApiProperties, GoogleAuthorizationCodeFlowWrapper googleAuthorizationCodeFlowWrapper, GoogleDriveApiService googleDriveApiService) {
+    public GoogleAccessServiceImpl(UserService userService, OAuthUserService oAuthUserService, GoogleApiProperties googleApiProperties, GoogleAuthorizationCodeFlowWrapper googleAuthorizationCodeFlowWrapper, GoogleDriveApiService googleDriveApiService, AuthenticationUtils authenticationUtils) {
         this.userService = userService;
         this.oAuthUserService = oAuthUserService;
         this.googleApiProperties = googleApiProperties;
         this.googleAuthorizationCodeFlowWrapper = googleAuthorizationCodeFlowWrapper;
         this.googleDriveApiService = googleDriveApiService;
+        this.authenticationUtils = authenticationUtils;
     }
 
     @Override
@@ -57,7 +58,7 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
         Set<String> newGrantedScopes = new HashSet<>();
         updateAccess(newGrantedScopes, grantCalendarAccess, SCOPE_CALENDAR);
         updateAccess(newGrantedScopes, grantGmailAccess, SCOPE_GMAIL);
-        updateAccess(newGrantedScopes,grantDriveAccess,SCOPE_DRIVE);
+        updateAccess(newGrantedScopes, grantDriveAccess, SCOPE_DRIVE);
 
         session.setAttribute("updatedScopes", new StringSetWrapper(newGrantedScopes));
         String[] scopes = googleApiProperties.getScope().split(",");
@@ -66,7 +67,7 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
 
         List<String> requiredScopes = new ArrayList<>(SetOfRequiredScopes);
         GoogleAuthorizationCodeFlow authorizationCodeFlow = googleAuthorizationCodeFlowWrapper.build(requiredScopes);
-        String authorizationRequestUrl = googleApiProperties.buildAuthorizationUri(REDIRECT_URI,state,accessType,email,requiredScopes,authorizationCodeFlow);
+        String authorizationRequestUrl = googleApiProperties.buildAuthorizationUri(REDIRECT_URI, state, accessType, email, requiredScopes, authorizationCodeFlow);
 
         return new RedirectView(authorizationRequestUrl);
     }
@@ -79,11 +80,11 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
             return "redirect:/register";
         }
 
-        String email = ((DefaultOidcUser) authentication.getPrincipal()).getEmail();
-        User user = userService.findByEmail(email);
-        OAuthUser oAuthUser = user.getOauthUser();
+        int userId = authenticationUtils.getLoggedInUserId(authentication);
+        User user = userService.findById(userId);
+        OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
 
-        handleScopeChanges(session,oAuthUser);
+        handleScopeChanges(session, oAuthUser);
         List<String> requiredScopes = new ArrayList<>(oAuthUser.getGrantedScopes());
 
         GoogleAuthorizationCodeFlow flow = googleAuthorizationCodeFlowWrapper.build(requiredScopes);
@@ -103,17 +104,17 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
 
         Set<String> actualGrantedScopes = extractActualGrantedScopes(tokenResponse);
         oAuthUser.setGrantedScopes(actualGrantedScopes);
-        oAuthUserService.save(oAuthUser,user);
-        if(actualGrantedScopes.contains(SCOPE_DRIVE)){
+        oAuthUserService.save(oAuthUser, user);
+        if (actualGrantedScopes.contains(SCOPE_DRIVE)) {
             try {
-                googleDriveApiService.findOrCreateTemplateFolder(oAuthUser,"Templates");
+                googleDriveApiService.findOrCreateTemplateFolder(oAuthUser, "Templates");
             } catch (IOException | GeneralSecurityException e) {
 //                throw new RuntimeException(e);
             }
         }
 
 
-        return "redirect:/settings/google-services";
+        return "redirect:/crm/settings/google-services";
     }
 
     public void verifyAccessAndHandleRevokedToken(OAuthUser oAuthUser, User user, List<String> scopesToCheck) throws IOException {
@@ -146,9 +147,10 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
                 Set<String> setOfRequiredScopes = new HashSet<>(Arrays.asList(scopes));
                 oAuthUser.setGrantedScopes(setOfRequiredScopes);
                 oAuthUserService.save(oAuthUser, user);
-            } else {
-                // Log and handle other exceptions as needed
             }
+//            else {
+//                // Log and handle other exceptions as needed
+//            }
             return;
         } catch (IOException e) {
             // Log and handle other IOExceptions as needed
@@ -198,6 +200,7 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
             oAuthUserService.revokeAccess(oAuthUser);
         }
     }
+
     private Set<String> extractActualGrantedScopes(GoogleTokenResponse tokenResponse) {
         String grantedScopesStr = tokenResponse.get("scope").toString();
         Set<String> actualGrantedScopes = new HashSet<>(Arrays.asList(grantedScopesStr.split(" ")));
