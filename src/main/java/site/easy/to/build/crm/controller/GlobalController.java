@@ -14,4 +14,24 @@ public class GlobalController {
     public String unauthorizedGoogleErrorPage(){
         return "google-error";
     }
+
+    @GetMapping("/not-found")
+    public String notFound(){
+        return "error/not-found";
+    }
+
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "error/access-denied";
+    }
+
+    @GetMapping("/account-inactive")
+    public String accountInactive() {
+        return "error/account-inactive";
+    }
+
+    @GetMapping("/account-suspended")
+    public String accountSuspended() {
+        return "error/account-suspended";
+    }
 }
