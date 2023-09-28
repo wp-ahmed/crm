@@ -38,80 +38,36 @@
         <div class="card-body">
             <form class="form-horizontal form-material" id="loginform" th:action="@{/register}" th:object="${user}" method="post">
                 <div class="text-center">
-                    <a href="javascript:void(0)" class="db"><img th:src="@{images/logo-icon.png}" alt="Home" /><br/><img th:src="@{/images/logo-text.png}" alt="Home" /></a>
+                    <h2 class="card-title">CRM</h2>
                 </div>
                 <h3 class="box-title m-t-40 m-b-0">Register Now</h3><small>Create your account and enjoy</small>
                 <div class="form-group m-t-20">
                     <div class="col-xs-12">
                         <label for="username">Username:</label>
-                        <input class="form-control" type="text" id="username" th:field="*{username}" required />
+                        <input class="form-control" type="text" id="username" th:field="*{username}" />
                     </div>
                 </div>
-                <div class="form-group m-t-20">
-                    <div class="col-xs-12">
-                        <label for="firstName">First Name:</label>
-                        <input class="form-control" type="text" id="firstName" th:field="*{firstName}" required />
-                    </div>
-                </div>
-                <div class="form-group m-t-20">
-                    <div class="col-xs-12">
-                        <label for="lastName">Last Name:</label>
-                        <input class="form-control" type="text" id="lastName" th:field="*{lastName}" required />
-                    </div>
+                <div class="input-group">
+                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                 </div>
                 <div class="form-group m-t-20">
                     <div class="col-xs-12">
                         <label for="email">Email:</label>
-                        <input class="form-control" type="email" id="email" th:field="*{email}" required />
+                        <input class="form-control" type="email" id="email" th:field="*{email}" />
                     </div>
+                </div>
+                <div class="input-group">
+                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                 </div>
                 <div class="form-group m-t-20">
                     <div class="col-xs-12">
                         <label for="password">Password:</label>
-                        <input class="form-control" type="password" id="password" th:field="*{password}" required />
+                        <input class="form-control" type="password" id="password" th:field="*{password}" />
                     </div>
                 </div>
-                <div class="form-group m-t-20">
-                    <div class="col-xs-12">
-                        <label for="phone">Phone:</label>
-                        <input class="form-control" type="tel" id="phone" th:field="*{phone}" required />
-                    </div>
+                <div class="input-group">
+                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
                 </div>
-                <div class="form-group m-t-20">
-                    <div class="col-xs-12">
-                        <label for="department">Department:</label>
-                        <input class="form-control" type="text" id="department" th:field="*{department}" required />
-                    </div>
-                </div>
-                <div class="form-group m-t-20">
-                    <div class="col-xs-12">
-                        <label for="hireDate">Hire Date:</label>
-                        <input class="form-control" type="date" id="hireDate" th:field="*{hireDate}" required />
-                    </div>
-                </div>
-                <div class="form-group m-t-20">
-                    <div class="col-xs-12">
-                        <label for="salary">Salary:</label>
-                        <input class="form-control" type="number" step="0.01" id="salary" th:field="*{salary}" required />
-                    </div>
-                </div>
-                <div class="form-group m-t-20">
-                    <div class="col-xs-12">
-                        <label for="status">Status:</label>
-                        <select id="status" th:field="*{status}" required>
-                            <option th:each="status : ${T(site.easy.to.build.crm.entity.User.Status).values()}"
-                                    th:value="${status.name()}" th:text="${status.name()}"></option>
-                        </select>
-                    </div>
-                </div>
-<!--                <div class="form-group row">-->
-<!--                    <div class="col-md-12">-->
-<!--                        <div class="custom-control custom-checkbox">-->
-<!--                            <input type="checkbox" class="custom-control-input" id="customCheck1">-->
-<!--                            <label class="custom-control-label" for="customCheck1">I agree to all <a href="javascript:void(0)">Terms</a></label>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div class="form-group text-center m-t-20">
                     <div class="col-xs-12">
                         <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Sign Up</button>
@@ -119,7 +75,7 @@
                 </div>
                 <div class="form-group m-b-0">
                     <div class="col-sm-12 text-center">
-                        <p>Already have an account? <a href="pages-login-2.html" class="text-info m-l-5"><b>Sign In</b></a></p>
+                        <p>Already have an account? <a href="/login" class="text-info m-l-5"><b>Sign In</b></a></p>
                     </div>
                 </div>
             </form>
