@@ -1,22 +1,20 @@
 package site.easy.to.build.crm.google.service.drive;
 
 import com.google.api.client.http.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.stereotype.Service;
+import site.easy.to.build.crm.entity.File;
 import site.easy.to.build.crm.entity.OAuthUser;
 import site.easy.to.build.crm.google.model.drive.GoogleDriveFile;
 import site.easy.to.build.crm.google.model.drive.GoogleDriveFolder;
 import site.easy.to.build.crm.google.util.GoogleApiHelper;
-import site.easy.to.build.crm.service.OAuthUserService;
+import site.easy.to.build.crm.service.user.OAuthUserService;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.security.GeneralSecurityException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class  GoogleDriveApiServiceImpl implements GoogleDriveApiService {
@@ -99,7 +97,59 @@ public class  GoogleDriveApiServiceImpl implements GoogleDriveApiService {
     }
 
     @Override
-    public void createFolder(OAuthUser oAuthUser, String folderName) throws IOException, GeneralSecurityException {
+    public List<String> uploadWorkspaceFile(OAuthUser oAuthUser, List<File> files, String folderId) throws IOException, GeneralSecurityException {
+        String accessToken = oAuthUserService.refreshAccessTokenIfNeeded(oAuthUser);
+        HttpRequestFactory httpRequestFactory = GoogleApiHelper.createRequestFactory(accessToken);
+        List<String> fileIds = new ArrayList<>();
+        for (File file : files) {
+            String name = file.getFileName();
+            String mimeType = file.getFileType();
+            if (name == null || name.isEmpty()) {
+                System.out.println("Skipping file with empty name.");
+                continue;
+            }
+
+            byte[] fileData = file.getFileData();
+            ByteArrayContent content = new ByteArrayContent(mimeType, fileData);
+            com.google.api.client.http.HttpRequest request = httpRequestFactory.buildPostRequest(
+                    new GenericUrl("https://www.googleapis.com/upload/drive/v3/files"),
+                    content
+            );
+
+            request.getHeaders().set("Authorization", "Bearer " + accessToken);
+            request.getHeaders().set("Content-Disposition", "attachment; filename=\"" + name + "\"");
+
+            JsonObject metadataJson = new JsonObject();
+            metadataJson.addProperty("name", name);
+            metadataJson.addProperty("mimeType", mimeType);
+            JsonArray parentsArray = new JsonArray();
+
+            if (!folderId.isEmpty()) {
+                parentsArray.add(folderId);
+                metadataJson.add("parents", parentsArray);
+            }
+
+            String metadataString = metadataJson.toString();
+            ByteArrayContent metadataContent = ByteArrayContent.fromString("application/json", metadataString);
+
+            metadataContent.setType(String.valueOf(new HttpMediaType("application/json")));
+
+            MultipartContent multipartContent = new MultipartContent();
+            multipartContent.addPart(new MultipartContent.Part(metadataContent));
+            multipartContent.addPart(new MultipartContent.Part(new ByteArrayContent(mimeType, fileData)));
+
+            request.setContent(multipartContent);
+//            request.getHeaders().set("name", name);
+            HttpResponse response = request.execute();
+            JsonObject jsonResponse = JsonParser.parseString(response.parseAsString()).getAsJsonObject();
+            String fileId = jsonResponse.get("id").getAsString();
+            fileIds.add(fileId);
+        }
+        return fileIds;
+    }
+
+    @Override
+    public String createFolder(OAuthUser oAuthUser, String folderName) throws IOException, GeneralSecurityException {
         JsonObject folderMetadata = new JsonObject();
         folderMetadata.addProperty("name", folderName);
         folderMetadata.addProperty("mimeType", "application/vnd.google-apps.folder");
@@ -112,9 +162,23 @@ public class  GoogleDriveApiServiceImpl implements GoogleDriveApiService {
         GenericUrl driveUrl = GoogleApiHelper.buildGenericUrl(API_BASE_URL,null);
 
         HttpRequest request = httpRequestFactory.buildPostRequest(driveUrl, content);
-        request.execute();
+        HttpResponse response = request.execute();
+
+        JsonObject jsonResponse = JsonParser.parseString(response.parseAsString()).getAsJsonObject();
+        return jsonResponse.get("id").getAsString();
     }
 
+    @Override
+    public void checkFolderExists(OAuthUser oAuthUser, String folderId) throws IOException, GeneralSecurityException {
+        String accessToken = oAuthUserService.refreshAccessTokenIfNeeded(oAuthUser);
+        HttpRequestFactory httpRequestFactory = GoogleApiHelper.createRequestFactory(accessToken);
+
+        GenericUrl driveUrl = new GenericUrl(API_BASE_URL + "/" + folderId);
+
+        HttpRequest request = httpRequestFactory.buildGetRequest(driveUrl);
+        HttpResponse response = request.execute();
+
+    }
     @Override
     public void createFileInFolder(OAuthUser oAuthUser, String fileName, String folderId, String type) throws IOException, GeneralSecurityException {
         String mimeType = getMimeTypeForType(type);
@@ -217,5 +281,34 @@ public class  GoogleDriveApiServiceImpl implements GoogleDriveApiService {
         // Create and execute the DELETE request
         HttpRequest request = httpRequestFactory.buildDeleteRequest(driveUrl);
         request.execute();
+    }
+
+    @Override
+    public boolean isFileExists(OAuthUser oAuthUser, String fileId) throws IOException, GeneralSecurityException {
+
+        String accessToken = oAuthUserService.refreshAccessTokenIfNeeded(oAuthUser);
+        HttpRequestFactory httpRequestFactory = GoogleApiHelper.createRequestFactory(accessToken);
+
+        HashMap<String, String> queryParams = new HashMap<>();
+        queryParams.put("q", "mimeType != 'application/vnd.google-apps.folder'");
+        queryParams.put("fields", "files(id)");
+
+        GenericUrl driveUrl = GoogleApiHelper.buildGenericUrl(API_BASE_URL, queryParams);
+        HttpRequest request = httpRequestFactory.buildGetRequest(driveUrl);
+        HttpResponse response = request.execute();
+        String responseBody = response.parseAsString();
+        Gson gson = new Gson();
+        JsonObject jsonResponse = gson.fromJson(responseBody, JsonObject.class);
+        JsonArray filesArray = jsonResponse.getAsJsonArray("files");
+
+        for (JsonElement fileElement : filesArray) {
+            JsonObject fileObject = fileElement.getAsJsonObject();
+            String existingFileId = fileObject.get("id").getAsString();
+            if (existingFileId.equals(fileId)) {
+                return true; // File with the provided ID exists in Google Drive
+            }
+        }
+
+        return false; // File with the provided ID does not exist in Google Drive
     }
 }
