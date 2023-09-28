@@ -16,7 +16,6 @@ import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import jakarta.mail.util.ByteArrayDataSource;
-import site.easy.to.build.crm.entity.OAuthUser;
 import site.easy.to.build.crm.google.model.gmail.Attachment;
 import site.easy.to.build.crm.google.model.gmail.CustomHeader;
 import site.easy.to.build.crm.google.model.gmail.GmailApiMessage;
@@ -27,10 +26,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.*;
-import java.util.zip.GZIPInputStream;
 
 public class GoogleApiHelper {
     private static final String GMAIL_API_BASE_URL = "https://www.googleapis.com/gmail/v1/users/me";
+
     public static HttpRequestFactory createRequestFactory(String accessToken) throws GeneralSecurityException, IOException {
         HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         GsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -40,6 +39,7 @@ public class GoogleApiHelper {
             request.getHeaders().setAuthorization("Bearer " + accessToken);
         });
     }
+
     public static GenericUrl buildGenericUrl(String baseURL, Map<String, String> queryParams) {
         GenericUrl genericUrl = new GenericUrl(baseURL);
 
@@ -60,6 +60,7 @@ public class GoogleApiHelper {
 
         return Base64.getUrlEncoder().encodeToString(email.getBytes(StandardCharsets.UTF_8));
     }
+
     public static String createRawEmailWithAttachments(String to, String subject, String body, List<File> attachments, List<Attachment> initAttachment) throws MessagingException, IOException {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
@@ -114,9 +115,9 @@ public class GoogleApiHelper {
             byte[] data = decoder.decode(message.getPayload().getBody().getData());
             return new String(data, StandardCharsets.UTF_8);
         }
-        if (mimeType != null && (mimeType.startsWith("multipart/mixed") || mimeType.startsWith("multipart/related") || mimeType.startsWith("multipart/alternative")) ) {
+        if (mimeType != null && (mimeType.startsWith("multipart/mixed") || mimeType.startsWith("multipart/related") || mimeType.startsWith("multipart/alternative"))) {
             List<Part> parts = message.getPayload().getParts();
-            Map<String, String> results = processParts(parts, decoder,accessToken, emailId);
+            Map<String, String> results = processParts(parts, decoder, accessToken, emailId);
             String plainTextBody = results.getOrDefault("plainTextBody", "");
             String htmlBody = results.getOrDefault("htmlBody", "");
 
@@ -126,7 +127,7 @@ public class GoogleApiHelper {
         return body;
     }
 
-    private static Map<String, String> processParts(List<Part> parts, Base64.Decoder decoder,String accessToken, String emailId) {
+    private static Map<String, String> processParts(List<Part> parts, Base64.Decoder decoder, String accessToken, String emailId) {
         String plainTextBody = "";
         String htmlBody = "";
         Map<String, String> inlineImages = new HashMap<>();
@@ -164,13 +165,13 @@ public class GoogleApiHelper {
                 String attachmentId = entry.getValue();
                 String imageData;
                 try {
-                    imageData = getAttachmentData(attachmentId, emailId,accessToken);
+                    imageData = getAttachmentData(attachmentId, emailId, accessToken);
                 } catch (IOException | GeneralSecurityException e) {
                     e.printStackTrace();
                     continue;
                 }
-                String replaceString=imageData.replaceAll("_","/");
-                String finl = replaceString.replaceAll("-","+");
+                String replaceString = imageData.replaceAll("_", "/");
+                String finl = replaceString.replaceAll("-", "+");
                 String imageSrc = "data:image/*;base64," + finl;
                 htmlBody = htmlBody.replace("cid:" + contentId, imageSrc);
             }
@@ -203,12 +204,13 @@ public class GoogleApiHelper {
         }
         return null;
     }
+
     public static String getAttachmentData(String attachmentId, String emailId, String accessToken) throws GeneralSecurityException, IOException {
         HttpRequestFactory httpRequestFactory = createRequestFactory(accessToken);
         GenericUrl attachmentUrl = new GenericUrl(GMAIL_API_BASE_URL + "/messages/" + emailId + "/attachments/" + attachmentId);
         HttpRequest request = httpRequestFactory.buildGetRequest(attachmentUrl);
         HttpResponse response = request.execute();
-        JsonObject jsonResponse = null;
+        JsonObject jsonResponse;
         String responseBody = response.parseAsString();
         jsonResponse = GsonUtil.fromJson(responseBody);
         return jsonResponse.get("data").getAsString();
