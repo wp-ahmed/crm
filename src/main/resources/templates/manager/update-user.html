@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:insert="~{/general/head.html}"></div>
+<meta name="csrf" content="${_csrf.token}"/>
+<meta name="csrf_header" content="${_csrf.headerName}"/>
+<link rel="stylesheet" th:href="@{/css/bootstrap-wysihtml5.css}"/>
+<!-- Editable CSS -->
+<link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+<!-- Custom CSS -->
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!-- page css -->
+<link th:href="@{/css/pages/inbox.css}" rel="stylesheet">
+<!--<link th:href="@{/css/form-icheck.css}" rel="stylesheet">-->
+<link th:href="@{/css/ribbon-page.css}" rel="stylesheet">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="skin-blue fixed-layout">
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">Elite admin</p>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/header.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/left-sidebar.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div th:insert="~{/general/page-titles.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Start Page Content -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Update User</h4>
+                            <form th:object="${user}" th:action="@{/manager/update-user}"  id="email-form" method="post">
+                                <label class="m-t-20" for="status">Status:</label>
+                                <div class="input-group">
+                                    <select id="status" th:field="*{status}" class="form-control">
+                                        <option th:selected="${user.status == 'active' ? 'selected' : ''}" value="active">Active</option>
+                                        <option th:selected="${user.status == 'inactive' ? 'selected' : ''}" value="inactive">Inactive</option>
+                                        <option th:selected="${user.status == 'suspended' ? 'selected' : ''}" value="suspended">Suspended</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <span class="text-danger font-weight-bold" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></span>
+                                </div>
+                                <label class="m-t-20" for="role">Role:</label>
+                                <div class="input-group">
+                                    <select id="role" class="form-control" name="role">
+                                        <option th:each="role : ${roles}" th:selected="${user.roles[0].name eq role.name}" th:value="${role.id}" th:text="${role.name}"></option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary m-t-20">Update user</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--            <div th:if="${!isGoogleUser}" class="ribbon-wrapper card">-->
+<!--                <h4 class="card-title">Provider of email sending services</h4>-->
+<!--                <div class="ribbon ribbon-danger">Email Service</div>-->
+<!--                <p class="ribbon-content">To register a new user, you must sign in using Google. This is because when a new user is registered, an email will be sent to them for setting their password later on.-->
+<!--                    Currently, we only provide Google Email Sending provider. To sign in using Google, please use the <a href="/oauth2/authorization/google"><b>following link.</b></a></p>-->
+<!--            </div>-->
+<!--            <div th:if="${isGoogleUser && !gmailAccess}" class="ribbon-wrapper card">-->
+<!--                <h4 class="card-title">Provider of email sending services</h4>-->
+<!--                <div class="ribbon ribbon-danger">Gmail Access</div>-->
+<!--                <p class="ribbon-content">You must grant access to Gmail services.  This is because when a new user is registered, an email will be sent to them for setting their password later on.-->
+<!--                    Currently, we only provide Google Email Sending provider. To grant an access, please use the <a-->
+<!--                            href="/settings/google-services">following link</a>-->
+<!--                </p>-->
+<!--            </div>-->
+            <!-- ============================================================== -->
+            <!-- End Page Content -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right sidebar -->
+            <!-- ============================================================== -->
+            <!-- .right-sidebar -->
+            <div th:insert="~{/general/right-sidebar.html}"></div>
+            <!-- ============================================================== -->
+            <!-- End Right sidebar -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <div th:insert="~{/general/footer.html}"></div>
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>
+<script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript">></script>
+<!--    &lt;!&ndash; slimscrollbar scrollbar JavaScript &ndash;&gt;-->
+<script th:src="@{/js/library/perfect-scrollbar.jquery.min.js}" type="text/javascript">></script>
+<!--Wave Effects -->
+<script th:src="@{/js/library/waves.js}" type="text/javascript">></script>
+<!--Menu sidebar -->
+<script th:src="@{/js/library/sidebarmenu.js}" type="text/javascript">></script>
+<!--stickey kit -->
+<script th:src="@{/js/library/sticky-kit.min.js}"></script>
+<script th:src="@{/js/library/jquery.sparkline.min.js}" type="text/javascript">></script>
+<!--Custom JavaScript -->
+<script th:src="@{/js/library/custom.min.js}" type="text/javascript">></script>
+<!-- Editable -->
+
+<script th:src="@{/js/library/wysihtml5-0.3.0.js}"></script>
+<script th:src="@{/js/library/bootstrap-wysihtml5.js}"></script>
+
+</body>
+</html>
