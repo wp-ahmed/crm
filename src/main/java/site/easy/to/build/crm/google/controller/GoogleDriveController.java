@@ -24,7 +24,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/drive")
+@RequestMapping("/crm/drive")
 public class GoogleDriveController {
 
     private final GoogleDriveApiService googleDriveApiService;
@@ -43,8 +43,8 @@ public class GoogleDriveController {
             return "/google-error";
         }
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
-        List<GoogleDriveFile> files = null;
-        List<GoogleDriveFolder> folders = null;
+        List<GoogleDriveFile> files;
+        List<GoogleDriveFolder> folders;
         try {
             files = googleDriveApiService.listFiles(oAuthUser);
             folders = googleDriveApiService.listFolders(oAuthUser);
@@ -64,13 +64,13 @@ public class GoogleDriveController {
         }
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
 
-        List<GoogleDriveFile> files = null;
+        List<GoogleDriveFile> files;
         try {
             files = googleDriveApiService.listFilesInFolder(oAuthUser,id);
         } catch (IOException | GeneralSecurityException e) {
             bindingResult.rejectValue("failedErrorMessage", "error.failedErrorMessage","There are might be a problem retrieving the file information, please try again later!");
             redirectAttributes.addFlashAttribute("bindingResult", bindingResult);
-            return "redirect:/drive/list-files";
+            return "redirect:/crm/drive/list-files";
         }
         model.addAttribute("files", files);
         return "google-drive/list-files-in-folder";
@@ -111,7 +111,7 @@ public class GoogleDriveController {
         } catch (GeneralSecurityException | IOException e) {
             return handleGoogleDriveApiException(model,e);
         }
-        return "redirect:/drive/list-files";
+        return "redirect:/crm/drive/list-files";
     }
     @GetMapping("/create-file")
     public String showFileCreationForm(Model model, Authentication authentication){
@@ -119,7 +119,7 @@ public class GoogleDriveController {
             return "/google-error";
         }
 
-        List<GoogleDriveFolder> folders = null;
+        List<GoogleDriveFolder> folders;
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
         try {
             folders = googleDriveApiService.listFolders(oAuthUser);
@@ -136,7 +136,7 @@ public class GoogleDriveController {
         if((authentication instanceof UsernamePasswordAuthenticationToken)) {
             return "/google-error";
         }
-        List<GoogleDriveFolder> folders = null;
+        List<GoogleDriveFolder> folders;
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
         try {
             folders = googleDriveApiService.listFolders(oAuthUser);
@@ -153,7 +153,7 @@ public class GoogleDriveController {
         } catch (GeneralSecurityException | IOException e) {
             return handleGoogleDriveApiException(model,e);
         }
-        return "redirect:/drive/list-files";
+        return "redirect:/crm/drive/list-files";
     }
 
     @PostMapping("/ajax-share")
