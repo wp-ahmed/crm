@@ -3,60 +3,211 @@
     <div class="scroll-sidebar">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
-            <ul id="sidebarnav">
-                <li class="user-pro"> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><img th:src="@{/images/1.jpg}" alt="user-img" class="img-circle"><span class="hide-menu">Mark Jeckson</span></a>
+            <ul id="sidebarnav" th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'') or hasRole(''ROLE_EMPLOYEE'')')}">
+                <li class="user-pro">
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <img th:if="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.OAuth2User)}" th:src="${#authentication.principal.picture}" alt="user-img" class="img-circle">
+                        <img th:if="${#authentication.principal instanceof T(org.springframework.security.core.userdetails.User)}" th:src="@{/images/pp.png}" class="img-circle">
+                        <span th:if="${#authentication.principal instanceof T(org.springframework.security.oauth2.core.user.OAuth2User)}" class="hide-menu" th:text="${#authentication.principal.givenName + ' ' +  #authentication.principal.familyName}"></span>
+                        <span th:if="${#authentication.principal instanceof T(org.springframework.security.core.userdetails.User)}" class="hide-menu" th:text="${#authentication.principal.username}"></span>
+                    </a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="javascript:void(0)"><i class="ti-user"></i> My Profile</a></li>
-                        <li><a href="javascript:void(0)"><i class="ti-wallet"></i> My Balance</a></li>
-                        <li><a href="javascript:void(0)"><i class="ti-email"></i> Inbox</a></li>
-                        <li><a href="javascript:void(0)"><i class="ti-settings"></i> Account Setting</a></li>
-                        <li><a href="javascript:void(0)"><i class="fa fa-power-off"></i> Logout</a></li>
+                        <li><a href="/crm/profile"><i class="ti-user"></i> My Profile</a></li>
+                        <li><a href="/crm/gmail/emails"><i class="ti-email"></i> Inbox</a></li>
+                        <li>
+                            <a th:if="${#authentication.principal instanceof T(org.springframework.security.core.userdetails.User) and !#authorization.expression('hasRole(''ROLE_CUSTOMER'')')}"
+                                                       href="/change-password" class="dropdown-item"><i class="fas fa-key"></i> change password</a>
+                        </li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit"><i class="fa fa-power-off"></i> Logout</button>
+                            </form>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-small-cap">--- Settings</li>
                 <li>
                     <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
-                        <i class="icon-speedometer"></i>
+                        <i class="fas fa-cogs"></i>
                         <span class="hide-menu">Settings</span>
                     </a>
                     <ul class="collapse">
-                        <li><a href="/settings/google-services">Google</a></li>
+                        <li><a href="/crm/settings/google-services">Google setting</a></li>
+                        <li>
+                            <a href="javascript:void(0)" class="has-arrow">Notification setting</a>
+                            <ul class="collapse">
+                                <li><a href="/crm/settings/email/contract">Contract settings</a></li>
+                                <li><a href="/crm/settings/email/lead">Lead Settings</a></li>
+                                <li><a href="/crm/settings/email/ticket">Ticket Settings</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-small-cap">--- Google Services</li>
                 <li>
                     <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
-                        <i class="ti-files"></i>
+                        <i class="fab fa-google"></i>
                         <span class="hide-menu">Services</span>
                     </a>
                     <ul class="collapse">
                         <li>
                             <a href="javascript:void(0)" class="has-arrow">Gmail</a>
                             <ul class="collapse">
-                                <li><a href="/gmail/send">Compose email</a></li>
-                                <li><a href="/gmail/emails">All emails</a></li>
-                                <li><a href="/gmail/emails/draft">Draft emails</a></li>
-                                <li><a href="/gmail/emails/starred">Starred emails</a></li>
-                                <li><a href="/gmail/emails/sent">Sent emails</a></li>
-                                <li><a href="/gmail/emails/trash">Trash emails</a></li>
+                                <li><a href="/crm/gmail/send">Compose email</a></li>
+                                <li><a href="/crm/gmail/emails">All emails</a></li>
+                                <li><a href="/crm/gmail/emails/draft">Draft emails</a></li>
+                                <li><a href="/crm/gmail/emails/starred">Starred emails</a></li>
+                                <li><a href="/crm/gmail/emails/sent">Sent emails</a></li>
+                                <li><a href="/crm/gmail/emails/trash">Trash emails</a></li>
                             </ul>
                         </li>
                         <li>
                             <a href="javascript:void(0)" class="has-arrow">Google calendar</a>
                             <ul class="collapse">
-                                <li><a href="/calendar/list-events">All events</a></li>
-                                <li><a href="/calendar/create-event">Create an event</a></li>
+                                <li><a href="/crm/calendar/list-events">All events</a></li>
+                                <li><a href="/crm/calendar/create-event">Create an event</a></li>
                             </ul>
                         </li>
                         <li>
                             <a href="javascript:void(0)" class="has-arrow">Google Drive</a>
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="/drive/list-files">All files && Folders</a></li>
-                                <li><a href="/drive/create-file">Create a file</a></li>
-                                <li><a href="/drive/create-folder">Create a folder</a></li>
+                                <li><a href="/crm/drive/list-files">files && Folders</a></li>
+                                <li><a href="/crm/drive/create-file">Create file</a></li>
+                                <li><a href="/crm/drive/create-folder">Create folder</a></li>
                             </ul>
                         </li>
                     </ul>
+                </li>
+                <li th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="nav-small-cap">--- Users</li>
+                <li>
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-users"></i>
+                        <span class="hide-menu">Users</span>
+                    </a>
+                    <ul th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" class="collapse">
+                        <li><a href="/manager/all-users">All user</a></li>
+                        <li><a href="/manager/register-user">Create user</a></li>
+                    </ul>
+                </li>
+                <li class="nav-small-cap">--- Customers</li>
+                <li>
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-users"></i>
+                        <span class="hide-menu">Customers</span>
+                    </a>
+                    <ul class="collapse">
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" href="/crm/customer/manager/all-customers">All customers</a></li>
+                        <li><a href="/crm/customer/my-customers">My customers</a></li>
+                        <li><a href="/crm/customer/create-customer">Create customer</a></li>
+                    </ul>
+                </li>
+                <li class="nav-small-cap">--- Tickets</li>
+                <li>
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span class="hide-menu">Tickets</span>
+                    </a>
+                    <ul class="collapse">
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" href="/crm/ticket/manager/all-tickets">All tickets</a></li>
+                        <li><a href="/crm/ticket/assigned-tickets">Assigned tickets</a></li>
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" href="/crm/ticket/created-tickets">Created tickets</a></li>
+                        <li><a href="/crm/ticket/create-ticket">Create ticket</a></li>
+                    </ul>
+                </li>
+                <li class="nav-small-cap">--- Leads</li>
+                <li>
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-pencil-alt"></i>
+                        <span class="hide-menu">Leads</span>
+                    </a>
+                    <ul class="collapse">
+                        <!--                        <li><a href="/all-customers">All customers</a></li>-->
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" href="/crm/lead/manager/all-leads">All Leads</a></li>
+                        <li><a href="/crm/lead/assigned-leads">Assigned Leads</a></li>
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" href="/crm/lead/created-leads">Created Leads</a></li>
+                        <li><a href="/crm/lead/create">Create new Lead</a></li>
+                    </ul>
+                </li>
+                <li class="nav-small-cap">--- Contracts</li>
+                <li>
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-file-contract"></i>
+                        <span class="hide-menu">Contracts</span>
+                    </a>
+                    <ul class="collapse">
+                        <!--                        <li><a href="/all-customers">All customers</a></li>-->
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" href="/crm/contract/manager/show-all">All contracts</a></li>
+                        <li><a href="/crm/contract/my-contracts">My contracts</a></li>
+                        <li><a href="/crm/contract/create">Create new contract</a></li>
+                    </ul>
+                </li>
+                <li class="nav-small-cap">--- Email Templates</li>
+                <li>
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-envelope"></i>
+                        <span class="hide-menu">Templates</span>
+                    </a>
+                    <ul class="collapse">
+                        <!--                        <li><a href="/all-customers">All customers</a></li>-->
+                        <li><a th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}" href="/crm/email-template/manager/show-all">All Templates</a></li>
+                        <li><a href="/crm/email-template/my-templates">My Templates</a></li>
+                        <li><a href="/crm/email-template/create">Create Template</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul id="sidebarnav" th:if="${#authorization.expression('hasRole(''ROLE_CUSTOMER'')')}">
+                <li class="user-pro">
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <img th:src="@{/images/pp.png}" class="img-circle">
+                        <span class="hide-menu" th:text="${#strings.substringBefore(#authentication.principal.username, '@')}"></span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="/customer/profile"><i class="ti-user"></i> My Profile</a></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit"><i class="fa fa-power-off"></i> Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)">
+                        <i class="fas fa-cogs"></i>
+                        <span class="hide-menu">Settings</span>
+                    </a>
+                    <ul class="collapse">
+                        <li>
+                            <a href="javascript:void(0)" class="has-arrow">Notification setting</a>
+                            <ul class="collapse">
+                                <li><a href="/customer/settings/email/contract">Contract settings</a></li>
+                                <li><a href="/customer/settings/email/lead">Lead Settings</a></li>
+                                <li><a href="/customer/settings/email/ticket">Ticket Settings</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-small-cap">--- Tickets</li>
+                <li>
+                    <a class="waves-effect waves-dark" href="/customer/my-tickets">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span class="hide-menu">My Tickets</span>
+                    </a>
+                </li>
+
+                <li class="nav-small-cap">--- Leads</li>
+                <li>
+                    <a class="waves-effect waves-dark" href="/customer/my-leads">
+                        <i class="fas fa-pencil-alt"></i>
+                        <span class="hide-menu">My Leads</span>
+                    </a>
+                </li>
+
+                <li class="nav-small-cap">--- Contracts</li>
+                <li>
+                    <a class="waves-effect waves-dark" href="/customer/my-contracts">
+                        <i class="fas fa-file-contract"></i>
+                        <span class="hide-menu">My Contracts</span>
+                    </a>
                 </li>
             </ul>
         </nav>
