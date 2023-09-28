@@ -78,7 +78,7 @@
                     <div class="card">
                         <div class="row">
                             <div class="card-body">
-                                <form th:action="@{/calendar/create-event}" th:object="${eventDisplay}" method="post">
+                                <form th:action="@{/crm/calendar/create-event}" th:object="${eventDisplay}" method="post">
 
                                     <label class="m-t-20" for="summary">Summary:</label>
                                     <div class="input-group">
@@ -160,9 +160,10 @@
 
                                     <label for="email-input" class="m-t-20">Attendees</label>
                                     <div class="input-group">
-                                        <input id="email-input" class="form-control">
-                                        <input type="hidden" id="emails" name="emails">
+                                        <input id="email-input" th:value="${email}" class="form-control">
+                                        <input type="hidden" th:value="${email}" id="emails" name="emails">
                                     </div>
+                                    <input type="hidden" th:value="${leadId}" id="leadId" name="leadId">
                                     <button type="submit" class="btn waves-effect waves-light btn-info m-t-20">Create Event</button>
                                 </form>
                             </div>
@@ -225,7 +226,9 @@
 
 <script th:src="@{/js/library/tagify.min.js}"></script>
 <script th:src="@{/js/library/tagify.polyfills.min.js}"></script>
-
+<script th:inline="javascript">
+    var email = /*[[${email}]]*/ null;
+</script>
 <script>
     // MAterial Date picker
     $('#mdate').bootstrapMaterialDatePicker({ weekStart: 0, time: false });
@@ -265,6 +268,7 @@
     jQuery('#datepicker-inline').datepicker({
         todayHighlight: true
     });
+
     // -------------------------------
     var input = document.querySelector('#email-input');
 var tagify = new Tagify(input, {
