@@ -78,7 +78,7 @@
                         <div class="row">
                             <div class="card-body">
                                 <h4 class="card-title">Google Services</h4>
-                                <form th:if="${oAuthUser != null}" th:action="@{/settings/grant-access}" method="post">
+                                <form th:if="${oAuthUser != null}" th:action="@{/crm/settings/grant-access}" method="post">
                                     <!--    <input type="hidden" name="userId" th:value="${oauthUser.id}" />-->
                                     <div>
                                         <input type="checkbox" id="grant-calendar-access" name="grantCalendarAccess"
@@ -97,7 +97,7 @@
                                     </div>
                                     <button type="submit" class="btn waves-effect waves-light btn-info">Update</button>
                                 </form>
-                                <form th:if="${oAuthUser == null}" th:action="@{/settings/grant-access}" method="post">
+                                <form th:if="${oAuthUser == null}" th:action="@{/crm/settings/grant-access}" method="post">
                                     <!--    <input type="hidden" name="userId" th:value="${oauthUser.id}" />-->
                                     <div>
                                         <input type="checkbox" id="grant-calendar-access" name="grantCalendarAccess"/>
