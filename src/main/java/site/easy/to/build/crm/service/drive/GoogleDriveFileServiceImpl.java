@@ -22,6 +22,11 @@ public class GoogleDriveFileServiceImpl implements GoogleDriveFileService {
     }
 
     @Override
+    public List<GoogleDriveFile> getAllDriveFileByContactId(int contractId) {
+        return googleDriveFileRepository.findByContractContractId(contractId);
+    }
+
+    @Override
     public void save(GoogleDriveFile googleDriveFile) {
         googleDriveFileRepository.save(googleDriveFile);
     }
