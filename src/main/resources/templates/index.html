@@ -209,7 +209,7 @@
                 <div class="col-md-6">
                     <div class="card bg-cyan text-white">
                         <div class="card-body ">
-                            <div class="row weather">
+                            <div class="row weather" th:if="${weatherData != null}">
                                 <div class="col-md-6 m-t-40">
                                     <h3>&nbsp;</h3>
                                     <div class="display-4"><span th:text="${weatherData.current.tempC}"></span><span><sup>°C</sup></span></div>
@@ -218,6 +218,15 @@
                                 <div class="col-6 text-right">
                                     <h1 class="m-b-"><i class="wi wi-day-cloudy-high"></i></h1>
                                     <p class="op-5" th:text="${weatherData.location.localtime}"></p>
+                                </div>
+                            </div>
+                            <div class="row weather" th:if="${weatherData == null}">
+                                <div class="col-md-6 m-t-40">
+                                    <h3>&nbsp;</h3>
+                                    <div class="display-4"><span>API Error</span></div>
+                                    <p class="text-white">For displaying the weather data please provide valid API</p>
+                                </div>
+                                <div class="col-6 text-right">
                                 </div>
                             </div>
                         </div>
