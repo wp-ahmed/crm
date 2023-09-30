@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `crm` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+--CREATE DATABASE  IF NOT EXISTS `crm` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `crm`;
 -- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
@@ -20,12 +20,11 @@ USE `crm`;
 
 --
 -- Table structure for table `users`
---
+----
 
-DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
@@ -46,10 +45,10 @@ CREATE TABLE `users` (
 -- Table structure for table `oauth_users`
 --
 
-DROP TABLE IF EXISTS `oauth_users`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `oauth_users` (
+CREATE TABLE IF NOT EXISTS `oauth_users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `access_token` varchar(255) NOT NULL,
@@ -71,10 +70,10 @@ CREATE TABLE `oauth_users` (
 -- Table structure for table `user_profile`
 --
 
-DROP TABLE IF EXISTS `user_profile`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_profile` (
+CREATE TABLE IF NOT EXISTS `user_profile` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
@@ -102,10 +101,10 @@ CREATE TABLE `user_profile` (
 -- Table structure for table `roles`
 --
 
-DROP TABLE IF EXISTS `roles`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `roles` (
+CREATE TABLE IF NOT EXISTS `roles` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -117,20 +116,25 @@ CREATE TABLE `roles` (
 --
 
 LOCK TABLES `roles` WRITE;
-/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (1,'ROLE_MANAGER'),(2,'ROLE_EMPLOYEE'),(3,'ROLE_CUSTOMER');
-/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
-UNLOCK TABLES;
 
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+
+INSERT IGNORE INTO `roles` (id, name)
+VALUES (1, 'ROLE_MANAGER'), (2, 'ROLE_EMPLOYEE'), (3, 'ROLE_CUSTOMER')
+ON DUPLICATE KEY UPDATE id = id;
+
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+
+UNLOCK TABLES;
 
 --
 -- Table structure for table `user_roles`
 --
 
-DROP TABLE IF EXISTS `user_roles`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_roles` (
+CREATE TABLE IF NOT EXISTS `user_roles` (
   `user_id` int NOT NULL,
   `role_id` int NOT NULL,
   PRIMARY KEY (`user_id`,`role_id`),
@@ -144,10 +148,10 @@ CREATE TABLE `user_roles` (
 -- Table structure for table `employee`
 --
 
-DROP TABLE IF EXISTS `employee`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employee` (
+CREATE TABLE IF NOT EXISTS `employee` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
   `first_name` varchar(45) NOT NULL,
@@ -163,10 +167,10 @@ CREATE TABLE `employee` (
 -- Table structure for table `email_template`
 --
 
-DROP TABLE IF EXISTS `email_template`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `email_template` (
+CREATE TABLE IF NOT EXISTS `email_template` (
   `template_id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `content` text,
@@ -184,10 +188,9 @@ CREATE TABLE `email_template` (
 -- Table structure for table `customer_login_info`
 --
 
-DROP TABLE IF EXISTS `customer_login_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `customer_login_info` (
+CREATE TABLE IF NOT EXISTS `customer_login_info` (
   `id` int NOT NULL AUTO_INCREMENT,
   `password` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
@@ -198,10 +201,9 @@ CREATE TABLE `customer_login_info` (
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `customer` (
+CREATE TABLE IF NOT EXISTS `customer` (
   `customer_id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
@@ -230,10 +232,10 @@ CREATE TABLE `customer` (
 -- Table structure for table `trigger_lead`
 --
 
-DROP TABLE IF EXISTS `trigger_lead`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `trigger_lead` (
+CREATE TABLE IF NOT EXISTS `trigger_lead` (
   `lead_id` int unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int unsigned NOT NULL,
   `user_id` int DEFAULT NULL,
@@ -260,10 +262,10 @@ CREATE TABLE `trigger_lead` (
 -- Table structure for table `trigger_ticket`
 --
 
-DROP TABLE IF EXISTS `trigger_ticket`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `trigger_ticket` (
+CREATE TABLE IF NOT EXISTS `trigger_ticket` (
   `ticket_id` int unsigned NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) DEFAULT NULL,
   `description` text,
@@ -287,10 +289,10 @@ CREATE TABLE `trigger_ticket` (
 -- Table structure for table `trigger_contract`
 --
 
-DROP TABLE IF EXISTS `trigger_contract`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `trigger_contract` (
+CREATE TABLE IF NOT EXISTS `trigger_contract` (
   `contract_id` int unsigned NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) DEFAULT NULL,
   `status` varchar(100) DEFAULT NULL,
@@ -318,10 +320,10 @@ CREATE TABLE `trigger_contract` (
 -- Table structure for table `contract_settings`
 --
 
-DROP TABLE IF EXISTS `contract_settings`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `contract_settings` (
+CREATE TABLE IF NOT EXISTS `contract_settings` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `amount` tinyint(1) DEFAULT NULL,
   `subject` tinyint(1) DEFAULT NULL,
@@ -358,10 +360,10 @@ CREATE TABLE `contract_settings` (
 -- Table structure for table `lead_action`
 --
 
-DROP TABLE IF EXISTS `lead_action`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `lead_action` (
+CREATE TABLE IF NOT EXISTS `lead_action` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `lead_id` int unsigned NOT NULL,
   `action` varchar(255) DEFAULT NULL,
@@ -377,10 +379,10 @@ CREATE TABLE `lead_action` (
 -- Table structure for table `lead_settings`
 --
 
-DROP TABLE IF EXISTS `lead_settings`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `lead_settings` (
+CREATE TABLE IF NOT EXISTS `lead_settings` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `status` tinyint(1) DEFAULT NULL,
   `meeting` tinyint(1) DEFAULT NULL,
@@ -413,10 +415,10 @@ CREATE TABLE `lead_settings` (
 -- Table structure for table `ticket_settings`
 --
 
-DROP TABLE IF EXISTS `ticket_settings`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `ticket_settings` (
+CREATE TABLE IF NOT EXISTS `ticket_settings` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `priority` tinyint(1) DEFAULT NULL,
   `subject` tinyint(1) DEFAULT NULL,
@@ -445,10 +447,10 @@ CREATE TABLE `ticket_settings` (
 -- Table structure for table `file`
 --
 
-DROP TABLE IF EXISTS `file`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `file` (
+CREATE TABLE IF NOT EXISTS `file` (
   `file_id` int NOT NULL AUTO_INCREMENT,
   `file_name` varchar(100) DEFAULT NULL,
   `file_data` blob,
@@ -467,10 +469,10 @@ CREATE TABLE `file` (
 -- Table structure for table `google_drive_file`
 --
 
-DROP TABLE IF EXISTS `google_drive_file`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `google_drive_file` (
+CREATE TABLE IF NOT EXISTS `google_drive_file` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `drive_file_id` varchar(255) DEFAULT NULL,
   `drive_folder_id` varchar(255) DEFAULT NULL,
