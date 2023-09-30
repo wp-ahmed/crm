@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `oauth_users` (
   UNIQUE KEY `email` (`email`),
   KEY `oauth_users_ibfk_1` (`user_id`),
   CONSTRAINT `oauth_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `user_profile` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_profile_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE IF NOT EXISTS `employee` (
-  `id` int NOT NULL AUTO_INCREMENT,
+ `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
   `first_name` varchar(45) NOT NULL,
   `last_name` varchar(45) NOT NULL,
@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `email_template` (
   UNIQUE KEY `name` (`name`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `email_template_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,42 +192,42 @@ CREATE TABLE IF NOT EXISTS `email_template` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE IF NOT EXISTS `customer_login_info` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `password` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT NULL,
-  `token` varchar(500) DEFAULT NULL,
-  `password_set` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `token` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+    `id` int NOT NULL AUTO_INCREMENT,
+    `password` varchar(255) DEFAULT NULL,
+    `username` varchar(255) DEFAULT NULL,
+    `token` varchar(500) DEFAULT NULL,
+    `password_set` tinyint(1) DEFAULT '0',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `token` (`token`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE IF NOT EXISTS `customer` (
-  `customer_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `city` varchar(255) DEFAULT NULL,
-  `state` varchar(255) DEFAULT NULL,
-  `country` varchar(255) DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
-  `description` text,
-  `position` varchar(255) DEFAULT NULL,
-  `twitter` varchar(255) DEFAULT NULL,
-  `facebook` varchar(255) DEFAULT NULL,
-  `youtube` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `profile_id` int DEFAULT NULL,
-  PRIMARY KEY (`customer_id`),
-  KEY `user_id` (`user_id`),
-  KEY `profile_id` (`profile_id`),
-  CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `customer_ibfk_2` FOREIGN KEY (`profile_id`) REFERENCES `customer_login_info` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+   `customer_id` int unsigned NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) DEFAULT NULL,
+    `phone` varchar(20) DEFAULT NULL,
+    `address` varchar(255) DEFAULT NULL,
+    `city` varchar(255) DEFAULT NULL,
+    `state` varchar(255) DEFAULT NULL,
+    `country` varchar(255) DEFAULT NULL,
+    `user_id` int DEFAULT NULL,
+    `description` text,
+    `position` varchar(255) DEFAULT NULL,
+    `twitter` varchar(255) DEFAULT NULL,
+    `facebook` varchar(255) DEFAULT NULL,
+    `youtube` varchar(255) DEFAULT NULL,
+    `created_at` datetime DEFAULT NULL,
+    `email` varchar(255) DEFAULT NULL,
+    `profile_id` int DEFAULT NULL,
+    PRIMARY KEY (`customer_id`),
+    KEY `user_id` (`user_id`),
+    KEY `profile_id` (`profile_id`),
+    CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+    CONSTRAINT `customer_ibfk_2` FOREIGN KEY (`profile_id`) REFERENCES `customer_login_info` (`id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `trigger_lead`
@@ -256,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `trigger_lead` (
   CONSTRAINT `trigger_lead_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
   CONSTRAINT `trigger_lead_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `trigger_lead_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -283,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `trigger_ticket` (
   CONSTRAINT `fk_ticket_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`),
   CONSTRAINT `fk_ticket_employee` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`),
   CONSTRAINT `fk_ticket_manager` FOREIGN KEY (`manager_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -314,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `trigger_contract` (
   CONSTRAINT `trigger_contract_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `trigger_lead` (`lead_id`),
   CONSTRAINT `trigger_contract_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `trigger_contract_ibfk_3` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,6 +339,7 @@ CREATE TABLE IF NOT EXISTS `contract_settings` (
   `description_email_template` int unsigned DEFAULT NULL,
   `start_email_template` int unsigned DEFAULT NULL,
   `end_email_template` int unsigned DEFAULT NULL,
+  `customer_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `status_email_template` (`status_email_template`),
@@ -347,14 +348,16 @@ CREATE TABLE IF NOT EXISTS `contract_settings` (
   KEY `description_email_template` (`description_email_template`),
   KEY `start_email_template` (`start_email_template`),
   KEY `end_email_template` (`end_email_template`),
+  KEY `customer_id` (`customer_id`),
   CONSTRAINT `contract_settings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `contract_settings_ibfk_2` FOREIGN KEY (`status_email_template`) REFERENCES `email_template` (`template_id`),
   CONSTRAINT `contract_settings_ibfk_3` FOREIGN KEY (`amount_email_template`) REFERENCES `email_template` (`template_id`),
   CONSTRAINT `contract_settings_ibfk_4` FOREIGN KEY (`subject_email_template`) REFERENCES `email_template` (`template_id`),
   CONSTRAINT `contract_settings_ibfk_5` FOREIGN KEY (`description_email_template`) REFERENCES `email_template` (`template_id`),
   CONSTRAINT `contract_settings_ibfk_6` FOREIGN KEY (`start_email_template`) REFERENCES `email_template` (`template_id`),
-  CONSTRAINT `contract_settings_ibfk_7` FOREIGN KEY (`end_email_template`) REFERENCES `email_template` (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `contract_settings_ibfk_7` FOREIGN KEY (`end_email_template`) REFERENCES `email_template` (`template_id`),
+  CONSTRAINT `contract_settings_ibfk_8` FOREIGN KEY (`customer_id`) REFERENCES `customer_login_info` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -394,18 +397,21 @@ CREATE TABLE IF NOT EXISTS `lead_settings` (
   `phone_email_template` int unsigned DEFAULT NULL,
   `meeting_email_template` int unsigned DEFAULT NULL,
   `name_email_template` int unsigned DEFAULT NULL,
+  `customer_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `status_email_template` (`status_email_template`),
   KEY `phone_email_template` (`phone_email_template`),
   KEY `meeting_email_template` (`meeting_email_template`),
   KEY `name_email_template` (`name_email_template`),
+  KEY `customer_id` (`customer_id`),
   CONSTRAINT `lead_settings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `lead_settings_ibfk_2` FOREIGN KEY (`status_email_template`) REFERENCES `email_template` (`template_id`),
   CONSTRAINT `lead_settings_ibfk_3` FOREIGN KEY (`phone_email_template`) REFERENCES `email_template` (`template_id`),
   CONSTRAINT `lead_settings_ibfk_4` FOREIGN KEY (`meeting_email_template`) REFERENCES `email_template` (`template_id`),
-  CONSTRAINT `lead_settings_ibfk_5` FOREIGN KEY (`name_email_template`) REFERENCES `email_template` (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `lead_settings_ibfk_5` FOREIGN KEY (`name_email_template`) REFERENCES `email_template` (`template_id`),
+  CONSTRAINT `lead_settings_ibfk_6` FOREIGN KEY (`customer_id`) REFERENCES `customer_login_info` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -430,18 +436,21 @@ CREATE TABLE IF NOT EXISTS `ticket_settings` (
   `subject_email_template` int unsigned DEFAULT NULL,
   `priority_email_template` int unsigned DEFAULT NULL,
   `description_email_template` int unsigned DEFAULT NULL,
+  `customer_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `status_email_template` (`status_email_template`),
   KEY `phone_email_template` (`subject_email_template`),
   KEY `priority_email_template` (`priority_email_template`),
   KEY `description_email_template` (`description_email_template`),
+  KEY `customer_id` (`customer_id`),
   CONSTRAINT `ticket_settings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `ticket_settings_ibfk_2` FOREIGN KEY (`status_email_template`) REFERENCES `email_template` (`template_id`),
   CONSTRAINT `ticket_settings_ibfk_3` FOREIGN KEY (`subject_email_template`) REFERENCES `email_template` (`template_id`),
   CONSTRAINT `ticket_settings_ibfk_4` FOREIGN KEY (`priority_email_template`) REFERENCES `email_template` (`template_id`),
-  CONSTRAINT `ticket_settings_ibfk_5` FOREIGN KEY (`description_email_template`) REFERENCES `email_template` (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `ticket_settings_ibfk_5` FOREIGN KEY (`description_email_template`) REFERENCES `email_template` (`template_id`),
+  CONSTRAINT `ticket_settings_ibfk_6` FOREIGN KEY (`customer_id`) REFERENCES `customer_login_info` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -463,7 +472,7 @@ CREATE TABLE IF NOT EXISTS `file` (
   KEY `contract_id` (`contract_id`),
   CONSTRAINT `file_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `trigger_lead` (`lead_id`),
   CONSTRAINT `file_ibfk_2` FOREIGN KEY (`contract_id`) REFERENCES `trigger_contract` (`contract_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -484,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `google_drive_file` (
   KEY `contract_id` (`contract_id`),
   CONSTRAINT `google_drive_file_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `trigger_lead` (`lead_id`),
   CONSTRAINT `google_drive_file_ibfk_2` FOREIGN KEY (`contract_id`) REFERENCES `trigger_contract` (`contract_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
