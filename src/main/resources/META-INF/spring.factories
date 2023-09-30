@@ -1,0 +1,1 @@
+org.springframework.boot.env.EnvironmentPostProcessor=site.easy.to.build.crm.config.init.OAuth2ClientIdInitializer
