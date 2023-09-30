@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,10 +37,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,9 +64,13 @@ public class ContractController {
     private final ContractEmailSettingsService contractEmailSettingsService;
     private final GoogleGmailApiService googleGmailApiService;
 
+    @Autowired
     public ContractController(ContractService contractService, AuthenticationUtils authenticationUtils, UserService userService,
                               CustomerService customerService, LeadService leadService, GoogleDriveApiService googleDriveApiService,
-                              FileUtil fileUtil, FileService fileService, GoogleDriveFileService googleDriveFileService, ContractExpirationChecker contractExpirationChecker, EntityManager entityManager, ContractEmailSettingsService contractEmailSettingsService, GoogleGmailApiService googleGmailApiService) {
+                              FileUtil fileUtil, FileService fileService, GoogleDriveFileService googleDriveFileService,
+                              ContractExpirationChecker contractExpirationChecker, EntityManager entityManager,
+                              ContractEmailSettingsService contractEmailSettingsService,
+                              GoogleGmailApiService googleGmailApiService) {
         this.contractService = contractService;
         this.authenticationUtils = authenticationUtils;
         this.userService = userService;
@@ -158,7 +160,7 @@ public class ContractController {
 
         List<GoogleDriveFolder> folders = null;
         boolean hasGoogleDriveAccess = false;
-        if (!(authentication instanceof UsernamePasswordAuthenticationToken)) {
+        if (!(authentication instanceof UsernamePasswordAuthenticationToken) && googleDriveApiService != null) {
             OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
             try {
                 hasGoogleDriveAccess = authenticationUtils.checkIfAppHasAccess(GoogleAccessService.SCOPE_DRIVE, oAuthUser);
@@ -213,7 +215,7 @@ public class ContractController {
 
             List<GoogleDriveFolder> folders = null;
             boolean hasGoogleDriveAccess = false;
-            if (!(authentication instanceof UsernamePasswordAuthenticationToken)) {
+            if (!(authentication instanceof UsernamePasswordAuthenticationToken) && googleDriveApiService != null) {
                 OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
                 try {
                     hasGoogleDriveAccess = authenticationUtils.checkIfAppHasAccess(GoogleAccessService.SCOPE_DRIVE, oAuthUser);
@@ -241,7 +243,7 @@ public class ContractController {
         List<Attachment> allFiles = objectMapper.readValue(files, new TypeReference<List<Attachment>>() {
         });
 
-        if (!(authentication instanceof UsernamePasswordAuthenticationToken)) {
+        if (!(authentication instanceof UsernamePasswordAuthenticationToken) && googleDriveApiService != null) {
             OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
             try {
                 if (folderId != null && !folderId.isEmpty()) {
@@ -255,7 +257,7 @@ public class ContractController {
         Contract createdContract = contractService.save(contract);
         fileUtil.saveFiles(allFiles, createdContract);
 
-        if (contract.getGoogleDrive()) {
+        if (contract.getGoogleDrive() != null) {
             fileUtil.saveGoogleDriveFiles(authentication, allFiles, folderId, createdContract);
         }
 
@@ -298,7 +300,7 @@ public class ContractController {
         List<GoogleDriveFolder> folders = null;
 
         boolean hasGoogleDriveAccess = false;
-        if (!(authentication instanceof UsernamePasswordAuthenticationToken)) {
+        if (!(authentication instanceof UsernamePasswordAuthenticationToken) && googleDriveApiService != null) {
             OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
             List<GoogleDriveFile> googleDriveFiles = contract.getGoogleDriveFiles();
             try {
@@ -366,7 +368,7 @@ public class ContractController {
             List<GoogleDriveFolder> folders = null;
 
             boolean hasGoogleDriveAccess = false;
-            if (!(authentication instanceof UsernamePasswordAuthenticationToken)) {
+            if (!(authentication instanceof UsernamePasswordAuthenticationToken) && googleDriveApiService != null) {
                 OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
                 List<GoogleDriveFile> googleDriveFiles = originalContract.getGoogleDriveFiles();
                 try {
@@ -394,7 +396,7 @@ public class ContractController {
         contract.setCreatedAt(originalContract.getCreatedAt());
 
         List<File> oldFiles = fileService.getContractFiles(contract.getContractId());
-        List<GoogleDriveFile> oldGoogleDriveFiles = googleDriveFileService.getAllDriveFileByLeadId(contract.getContractId());
+        List<GoogleDriveFile> oldGoogleDriveFiles = googleDriveFileService.getAllDriveFileByContactId(contract.getContractId());
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<Attachment> allFiles = objectMapper.readValue(files, new TypeReference<List<Attachment>>() {
@@ -410,7 +412,7 @@ public class ContractController {
         }
 
         fileUtil.saveFiles(allFiles, contract);
-        if (!(authentication instanceof UsernamePasswordAuthenticationToken) && contract.getGoogleDrive()) {
+        if (!(authentication instanceof UsernamePasswordAuthenticationToken) && contract.getGoogleDrive() && googleDriveApiService != null) {
             OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
             try {
                 if (folderId != null && !folderId.isEmpty()) {
@@ -429,7 +431,7 @@ public class ContractController {
 
         boolean isGoogleUser = !(authentication instanceof UsernamePasswordAuthenticationToken);
 
-        if (isGoogleUser) {
+        if (isGoogleUser && googleGmailApiService != null) {
             OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
             if (oAuthUser.getGrantedScopes().contains(GoogleAccessService.SCOPE_GMAIL)) {
                 try {
