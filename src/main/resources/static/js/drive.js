@@ -30,7 +30,7 @@ $(document).ready(function () {
         formData.append("id",id);
         $.ajax({
             type: 'POST',
-            url: '/drive/ajax-delete',
+            url: '/crm/drive/ajax-delete',
             data: formData,
             processData: false,
             contentType: false,
@@ -75,7 +75,7 @@ $(document).ready(function () {
         $('#exampleModalCenter .modal-content').append(preLoad);
         $.ajax({
             type: 'POST',
-            url: '/drive/ajax-share',
+            url: '/crm/drive/ajax-share',
             data: formData,
             processData: false,
             contentType: false,
