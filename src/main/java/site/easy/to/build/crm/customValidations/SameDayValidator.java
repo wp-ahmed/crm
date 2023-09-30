@@ -1,4 +1,4 @@
-package site.easy.to.build.crm.google.customValidations;
+package site.easy.to.build.crm.customValidations;
 
 import site.easy.to.build.crm.google.model.calendar.EventDisplay;
 
