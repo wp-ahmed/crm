@@ -14,6 +14,7 @@ public class GoogleAuthorizationCodeFlowWrapper {
     private final GsonFactory jsonFactory;
     private final GoogleClientSecrets clientSecrets;
 
+
     public GoogleAuthorizationCodeFlowWrapper(String clientId, String clientSecret) {
         httpTransport = new NetHttpTransport();
         jsonFactory = GsonFactory.getDefaultInstance();
