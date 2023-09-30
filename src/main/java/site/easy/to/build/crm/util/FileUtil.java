@@ -1,5 +1,6 @@
 package site.easy.to.build.crm.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import site.easy.to.build.crm.entity.File;
@@ -14,10 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class FileUtil {
@@ -27,7 +25,9 @@ public class FileUtil {
     private final GoogleDriveFileService googleDriveFileService;
     private final FileService fileService;
 
-    public FileUtil(GoogleDriveApiService googleDriveApiService, AuthenticationUtils authenticationUtils, GoogleDriveFileService googleDriveFileService, FileService fileService) {
+    @Autowired
+    public FileUtil(GoogleDriveApiService googleDriveApiService, AuthenticationUtils authenticationUtils,
+                    GoogleDriveFileService googleDriveFileService, FileService fileService) {
         this.googleDriveApiService = googleDriveApiService;
         this.authenticationUtils = authenticationUtils;
         this.googleDriveFileService = googleDriveFileService;
@@ -92,18 +92,20 @@ public class FileUtil {
         List<GoogleDriveFile> googleDriveFiles = new ArrayList<>();
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
         List<File> attachments = convertAttachmentsToFiles(allFiles);
-        try {
-            List<String> fileIds = googleDriveApiService.uploadWorkspaceFile(oAuthUser, attachments, folderId);
-            for (String fileId : fileIds) {
-                GoogleDriveFile googleDriveFile = createGoogleDriveFile(fileId, folderId, createdObject);
-                googleDriveFileService.save(googleDriveFile);
-                googleDriveFiles.add(googleDriveFile);
+        if(googleDriveFileService != null && googleDriveApiService != null) {
+            try {
+                List<String> fileIds = googleDriveApiService.uploadWorkspaceFile(oAuthUser, attachments, folderId);
+                for (String fileId : fileIds) {
+                    GoogleDriveFile googleDriveFile = createGoogleDriveFile(fileId, folderId, createdObject);
+                    googleDriveFileService.save(googleDriveFile);
+                    googleDriveFiles.add(googleDriveFile);
+                }
+            } catch (IOException | GeneralSecurityException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException | GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        }
 
-        setGoogleDriveFiles(createdObject, googleDriveFiles);
+            setGoogleDriveFiles(createdObject, googleDriveFiles);
+        }
     }
 
     private <T> GoogleDriveFile createGoogleDriveFile(String fileId, String folderId, T createdObject) {
@@ -128,21 +130,23 @@ public class FileUtil {
 
     public void deleteGoogleDriveFiles(List<GoogleDriveFile> googleDriveFiles, Authentication authentication) {
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
-        for (GoogleDriveFile googleDriveFile : googleDriveFiles) {
-            googleDriveFileService.delete(googleDriveFile.getId());
-            try {
-                if (googleDriveApiService.isFileExists(oAuthUser, googleDriveFile.getDriveFileId())) {
-                    googleDriveApiService.deleteFile(oAuthUser, googleDriveFile.getDriveFileId());
+        if(googleDriveFileService != null && googleDriveApiService != null) {
+            for (GoogleDriveFile googleDriveFile : googleDriveFiles) {
+                googleDriveFileService.delete(googleDriveFile.getId());
+                try {
+                    if (googleDriveApiService.isFileExists(oAuthUser, googleDriveFile.getDriveFileId())) {
+                        googleDriveApiService.deleteFile(oAuthUser, googleDriveFile.getDriveFileId());
+                    }
+                } catch (IOException | GeneralSecurityException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (IOException | GeneralSecurityException e) {
-                throw new RuntimeException(e);
             }
         }
     }
 
     public <T> void updateFilesBasedOnGoogleDriveFiles(OAuthUser oAuthUser, List<GoogleDriveFile> googleDriveFiles, T object) throws GeneralSecurityException, IOException {
         Class<?> createdObjectType = object.getClass();
-        if (googleDriveFiles != null && !googleDriveFiles.isEmpty()) {
+        if (googleDriveFiles != null && !googleDriveFiles.isEmpty() && googleDriveFileService != null && googleDriveApiService != null) {
             Iterator<GoogleDriveFile> iterator = googleDriveFiles.iterator();
             while (iterator.hasNext()) {
                 GoogleDriveFile googleDriveFile = iterator.next();
@@ -151,15 +155,16 @@ public class FileUtil {
                 }
             }
         }
-        try {
-            createdObjectType.getMethod("setGoogleDriveFiles", List.class).invoke(object, googleDriveFiles);
-            if (googleDriveFiles == null || googleDriveFiles.isEmpty()) {
-                createdObjectType.getMethod("setGoogleDrive", Boolean.class).invoke(object, false);
-                createdObjectType.getMethod("setGoogleDriveFolderId", String.class).invoke(object, "");
+        if(googleDriveFileService != null && googleDriveApiService != null) {
+            try {
+                createdObjectType.getMethod("setGoogleDriveFiles", List.class).invoke(object, googleDriveFiles);
+                if (googleDriveFiles == null || googleDriveFiles.isEmpty()) {
+                    createdObjectType.getMethod("setGoogleDrive", Boolean.class).invoke(object, false);
+                    createdObjectType.getMethod("setGoogleDriveFolderId", String.class).invoke(object, "");
+                }
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
         }
-
     }
 }
