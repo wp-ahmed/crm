@@ -1,4 +1,4 @@
-package site.easy.to.build.crm.service;
+package site.easy.to.build.crm.service.user;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleRefreshTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
@@ -8,11 +8,12 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.stereotype.Service;
-import site.easy.to.build.crm.dao.OAuthUserRepository;
-import site.easy.to.build.crm.dao.UserRepository;
+import site.easy.to.build.crm.repository.OAuthUserRepository;
+import site.easy.to.build.crm.repository.UserRepository;
 import site.easy.to.build.crm.entity.OAuthUser;
 import site.easy.to.build.crm.entity.User;
 
@@ -21,6 +22,7 @@ import java.security.GeneralSecurityException;
 import java.time.Instant;
 
 @Service
+@ConditionalOnExpression("!T(site.easy.to.build.crm.util.StringUtils).isEmpty('${spring.security.oauth2.client.registration.google.client-id:}')")
 public class OAuthUserServiceImpl implements OAuthUserService{
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -53,11 +55,17 @@ public class OAuthUserServiceImpl implements OAuthUserService{
     }
 
     @Override
+    public OAuthUser findBtEmail(String email) {
+        return oAuthUserRepository.findByEmail(email);
+    }
+
+    @Override
     public OAuthUser getOAuthUserByUser(User user) {
         return oAuthUserRepository.getOAuthUserByUser(user);
     }
 
     @Override
+    @ConditionalOnExpression("!T(site.easy.to.build.crm.util.StringUtils).isEmpty('${spring.security.oauth2.client.registration.google.client-id:}')")
     public String refreshAccessTokenIfNeeded(OAuthUser oauthUser) {
         Instant now = Instant.now();
         if (now.isBefore(oauthUser.getAccessTokenExpiration())) {
@@ -92,6 +100,7 @@ public class OAuthUserServiceImpl implements OAuthUserService{
     }
 
     @Override
+    @ConditionalOnExpression("!T(site.easy.to.build.crm.util.StringUtils).isEmpty('${spring.security.oauth2.client.registration.google.client-id:}')")
     public void revokeAccess(OAuthUser oAuthUser) {
         try {
             final NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -113,6 +122,11 @@ public class OAuthUserServiceImpl implements OAuthUserService{
     public void save(OAuthUser oAuthUser, User user) {
         oAuthUser.setUser(user);
         user.setOauthUser(oAuthUser);
+        oAuthUserRepository.save(oAuthUser);
+    }
+
+    @Override
+    public void save(OAuthUser oAuthUser) {
         oAuthUserRepository.save(oAuthUser);
     }
 
