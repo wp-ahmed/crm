@@ -10,5 +10,7 @@ import java.util.List;
 public interface GoogleDriveFileRepository extends JpaRepository<GoogleDriveFile, Integer> {
     public List<GoogleDriveFile> findByLeadLeadId(int leadId);
 
+    public List<GoogleDriveFile> findByContractContractId(int contractId);
+
     void deleteById(int id);
 }
