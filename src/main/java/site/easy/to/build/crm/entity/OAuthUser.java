@@ -37,6 +37,9 @@ public class OAuthUser {
     @Column(name = "refresh_token_expiration")
     private Instant refreshTokenExpiration;
 
+    @Column(name = "email")
+    private String email;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -44,7 +47,8 @@ public class OAuthUser {
     public OAuthUser() {
     }
 
-    public OAuthUser(Set<String> grantedScopes, String accessToken, Instant accessTokenIssuedAt, Instant accessTokenExpiration, String refreshToken, Instant refreshTokenIssuedAt, Instant refreshTokenExpiration, User user) {
+    public OAuthUser(Set<String> grantedScopes, String accessToken, Instant accessTokenIssuedAt, Instant accessTokenExpiration, String refreshToken,
+                     Instant refreshTokenIssuedAt, Instant refreshTokenExpiration, User user, String  email) {
         this.grantedScopes = grantedScopes;
         this.accessToken = accessToken;
         this.accessTokenIssuedAt = accessTokenIssuedAt;
@@ -53,6 +57,7 @@ public class OAuthUser {
         this.refreshTokenIssuedAt = refreshTokenIssuedAt;
         this.refreshTokenExpiration = refreshTokenExpiration;
         this.user = user;
+        this.email = email;
     }
 
     public Integer getId() {
@@ -125,5 +130,13 @@ public class OAuthUser {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
