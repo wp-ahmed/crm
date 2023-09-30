@@ -1,5 +1,6 @@
 package site.easy.to.build.crm.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,7 +44,10 @@ public class CustomerController {
     private final ContractService contractService;
     private final LeadService leadService;
 
-    public CustomerController(CustomerService customerService, UserService userService, CustomerLoginInfoService customerLoginInfoService, AuthenticationUtils authenticationUtils, GoogleGmailApiService googleGmailApiService, Environment environment, TicketService ticketService, ContractService contractService, LeadService leadService) {
+    @Autowired
+    public CustomerController(CustomerService customerService, UserService userService, CustomerLoginInfoService customerLoginInfoService,
+                              AuthenticationUtils authenticationUtils, GoogleGmailApiService googleGmailApiService, Environment environment,
+                              TicketService ticketService, ContractService contractService, LeadService leadService) {
         this.customerService = customerService;
         this.userService = userService;
         this.customerLoginInfoService = customerLoginInfoService;
@@ -162,7 +166,7 @@ public class CustomerController {
         Customer createdCustomer = customerService.save(customer);
         customerLoginInfo1.setCustomer(createdCustomer);
 
-        if (!(authentication instanceof UsernamePasswordAuthenticationToken) && sendEmail) {
+        if (!(authentication instanceof UsernamePasswordAuthenticationToken) && sendEmail && googleGmailApiService != null) {
             OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
             String baseUrl = environment.getProperty("app.base-url");
             String url = baseUrl + "set-password?token=" + customerLoginInfo.getToken();
