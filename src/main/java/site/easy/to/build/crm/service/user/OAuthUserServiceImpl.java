@@ -22,7 +22,6 @@ import java.security.GeneralSecurityException;
 import java.time.Instant;
 
 @Service
-@ConditionalOnExpression("!T(site.easy.to.build.crm.util.StringUtils).isEmpty('${spring.security.oauth2.client.registration.google.client-id:}')")
 public class OAuthUserServiceImpl implements OAuthUserService{
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
