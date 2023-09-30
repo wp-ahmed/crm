@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,39 +15,39 @@ import org.springframework.web.servlet.view.RedirectView;
 import site.easy.to.build.crm.entity.OAuthUser;
 import site.easy.to.build.crm.entity.User;
 import site.easy.to.build.crm.google.service.acess.GoogleAccessService;
-import site.easy.to.build.crm.service.OAuthUserService;
-import site.easy.to.build.crm.service.UserService;
+import site.easy.to.build.crm.service.user.OAuthUserService;
+import site.easy.to.build.crm.service.user.UserService;
+import site.easy.to.build.crm.util.AuthenticationUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Controller
-@RequestMapping("/settings")
-public class SettingsController {
+@RequestMapping("/crm/settings")
+public class GoogleSettingsController {
 
     final GoogleAccessService googleAccessService;
-
     final UserService userService;
-
     final OAuthUserService oAuthUserService;
+    final AuthenticationUtils authenticationUtils;
 
-    public SettingsController(GoogleAccessService googleAccessService, UserService userService, OAuthUserService oAuthUserService) {
+    public GoogleSettingsController(GoogleAccessService googleAccessService, UserService userService, OAuthUserService oAuthUserService, AuthenticationUtils authenticationUtils) {
         this.googleAccessService = googleAccessService;
         this.userService = userService;
         this.oAuthUserService = oAuthUserService;
+        this.authenticationUtils = authenticationUtils;
     }
 
     @GetMapping("/google-services")
     public String accessSettings(Model model, Authentication authentication) throws IOException {
-        if(authentication instanceof UsernamePasswordAuthenticationToken) {
-            model.addAttribute("oAuthUser",null);
+        if (authentication instanceof UsernamePasswordAuthenticationToken) {
+            model.addAttribute("oAuthUser", null);
             return "google-settings";
         }
-        String email = ((DefaultOidcUser) authentication.getPrincipal()).getEmail();
-        User user = userService.findByEmail(email);
-        OAuthUser oAuthUser = user.getOauthUser();
 
+        int userId = authenticationUtils.getLoggedInUserId(authentication);
+        User user = userService.findById(userId);
+        OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
 
         List<String> scopesToCheck = Arrays.asList(
                 GoogleAccessService.SCOPE_CALENDAR,
@@ -58,7 +57,7 @@ public class SettingsController {
 
         googleAccessService.verifyAccessAndHandleRevokedToken(oAuthUser, user, scopesToCheck);
         oAuthUserService.save(oAuthUser, user);
-        model.addAttribute("oAuthUser",oAuthUser);
+        model.addAttribute("oAuthUser", oAuthUser);
         return "google-settings";
     }
 
@@ -68,7 +67,7 @@ public class SettingsController {
                                           @RequestParam(required = false) boolean grantCalendarAccess,
                                           @RequestParam(required = false) boolean grantGmailAccess,
                                           @RequestParam(required = false) boolean grantDriveAccess) {
-        if((authentication instanceof UsernamePasswordAuthenticationToken)) {
+        if ((authentication instanceof UsernamePasswordAuthenticationToken)) {
             return new RedirectView("/google-error");
         }
         return googleAccessService.grantGoogleAccess(authentication, session, grantCalendarAccess, grantGmailAccess, grantDriveAccess);
