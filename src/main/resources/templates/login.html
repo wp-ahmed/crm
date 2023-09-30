@@ -8,8 +8,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
+    <link th:href="@{/css/login-register-lock.css}" rel="stylesheet">
+    <link th:href="@{/css/jquery.toast.css}" rel="stylesheet">
+
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/images/favicon.png}">
-    <title>Elite Admin Template - The Ultimate Multipurpose admin template</title>
+    <title>CRM Admin Template - The Ultimate Multipurpose admin template</title>
 
     <!-- page css -->
     <link th:href="@{/css/login-register-lock.css}" rel="stylesheet">
@@ -46,6 +49,12 @@
 <!--    </div>-->
     <div class="login-box card">
         <div class="card-body">
+            <div class="alert alert-info"  th:if="${tokenError != null or passwordSetError != null}" >
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Information
+                </h3><span th:if="${tokenError}" th:text="${tokenError}"></span><br>
+                <span th:if="${passwordSetError}" th:text="${passwordSetError}"></span>
+            </div>
             <form class="form-horizontal form-material text-center" id="loginform" th:action="@{/login}" method="post">
                 <a href="javascript:void(0)" class="db"><img th:src="@{images/logo-icon.png}" alt="Home" /><br/><img th:src="@{/images/logo-text.png}" alt="Home" /></a>
                 <div class="form-group m-t-40">
@@ -63,19 +72,6 @@
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     </div>
                 </div>
-<!--                <div class="form-group row">-->
-<!--                    <div class="col-md-12">-->
-<!--                        <div class="d-flex no-block align-items-center">-->
-<!--                            <div class="custom-control custom-checkbox">-->
-<!--                                <input type="checkbox" class="custom-control-input" id="customCheck1">-->
-<!--                                <label class="custom-control-label" for="customCheck1">Remember me</label>-->
-<!--                            </div>-->
-<!--                            <div class="ml-auto">-->
-<!--                                <a href="javascript:void(0)" id="to-recover" class="text-muted"><i class="fas fa-lock m-r-5"></i> Forgot pwd?</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div class="form-group text-center m-t-20">
                     <div class="col-xs-12">
                         <button class="btn btn-info btn-lg btn-block text-uppercase btn-rounded" type="submit">Log In</button>
@@ -91,7 +87,17 @@
                 </div>
                 <div class="form-group m-b-0">
                     <div class="col-sm-12 text-center">
-                        Don't have an account? <a href="pages-register2.html" class="text-primary m-l-5"><b>Sign Up</b></a>
+                        Don't have an account? <a href="/register" class="text-primary m-l-5"><b>Sign Up as An employee</b></a>
+                    </div>
+                </div>
+                <div class="form-group m-b-0">
+                    <div class="col-sm-12 text-center">
+                        Employees: Forgot your password? Reset it here, <a href="/change-password" class="text-primary m-l-5"><b>Change your password</b></a>
+                    </div>
+                </div>
+                <div class="form-group m-b-0 m-t-30">
+                    <div class="col-sm-12 text-center">
+                        If you are a customer, please use this <a href="/customer-login" class="text-primary m-l-5"><b>link to login</b></a>
                     </div>
                 </div>
             </form>
@@ -128,7 +134,8 @@
 <script th:src="@{/js/library/bootstrap.min.js}" type="text/javascript">></script>
 <!--Custom JavaScript -->
 <script th:src="@{/js/custom.js}" type="text/javascript">></script>
-
+<script th:src="@{/js/library/jquery.toast.js}"></script>
+<script th:src="@{/js/library/toastr.js}"></script>
 </body>
 
 </html>
