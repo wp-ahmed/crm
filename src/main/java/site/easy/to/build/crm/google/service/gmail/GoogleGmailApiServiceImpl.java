@@ -1,12 +1,7 @@
 package site.easy.to.build.crm.google.service.gmail;
 
 import com.google.api.client.http.*;
-import com.google.api.client.http.json.JsonHttpContent;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.JsonObjectParser;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
@@ -16,7 +11,7 @@ import site.easy.to.build.crm.entity.OAuthUser;
 import site.easy.to.build.crm.google.model.gmail.*;
 import site.easy.to.build.crm.google.util.GoogleApiHelper;
 import site.easy.to.build.crm.google.util.GsonUtil;
-import site.easy.to.build.crm.service.OAuthUserService;
+import site.easy.to.build.crm.service.user.OAuthUserService;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
