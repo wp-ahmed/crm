@@ -36,7 +36,7 @@ import java.security.GeneralSecurityException;
 import java.util.*;
 
 @Controller
-@RequestMapping("/gmail")
+@RequestMapping("/crm/gmail")
 public class GoogleGmailController {
     private final AuthenticationUtils authenticationUtils;
     private final GmailEmailService gmailEmailService;
@@ -60,7 +60,7 @@ public class GoogleGmailController {
         }
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
         if(!oAuthUser.getGrantedScopes().contains("https://www.googleapis.com/auth/gmail.modify")){
-            String link = "/settings/google-services";
+            String link = "/crm/settings/google-services";
             String code = "403";
             String buttonText = "Grant Access";
             String message = "Please grant the app access to Gmail  in order to use this service";
@@ -77,7 +77,7 @@ public class GoogleGmailController {
     @GetMapping("/send-draft/{draftId}")
     public String showEmailFormOfDraft(Model model, @PathVariable("draftId") String draftId, Authentication authentication) {
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
-        GmailEmailInfo emailForm = null;
+        GmailEmailInfo emailForm;
         try {
             emailForm = googleGmailApiService.getDraft(oAuthUser,draftId);
         } catch (GeneralSecurityException | IOException e) {
@@ -114,7 +114,7 @@ public class GoogleGmailController {
             bindingResult.addError(emailFailingError);
             return "gmail/email-form";
         }
-        return "redirect:/gmail/emails/sent?success=true";
+        return "redirect:/crm/gmail/emails/sent?success=true";
     }
 
     @PostMapping("/draft/ajax")
@@ -145,14 +145,14 @@ public class GoogleGmailController {
             return "/google-error";
         }
 
-        EmailPage emailsPerPage=null;
+        EmailPage emailsPerPage;
         List<String> labels = null;
-        int count = 0;
-        int draft = 0;
+        int count;
+        int draft;
         try {
             emailsPerPage = getEmailsByLabel(session, authentication, page, "inbox");
             OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
-            labels = googleGmailLabelService.fetchAllLabels(oAuthUser);
+//            labels = googleGmailLabelService.fetchAllLabels(oAuthUser);
             count = googleGmailApiService.getEmailsCount(oAuthUser,"in:inbox category:primary is:unread");
             draft = googleGmailApiService.getEmailsCount(oAuthUser,"is:draft");
             googleGmailApiService.getEmailsCount(oAuthUser, "in:inbox category:primary is:unread");
@@ -166,13 +166,13 @@ public class GoogleGmailController {
                 int statusCode = httpResponseException.getStatusCode();
                 if(statusCode == 403){
                     code = "403";
-                    link = "/settings/google-services";
+                    link = "/crm/settings/google-services";
                     buttonText = "Grant Access";
                     message = "Please grant the app access to Gmail  in order to use this service";
                 }
             }else if(page>1){
                 prevPage--;
-                link = "/gmail/emails?page="+prevPage;
+                link = "/crm/gmail/emails?page="+prevPage;
                 buttonText = "GO Back";
                 message = "There was a problem retrieving the emails at this page, Please try again later!";
             }
@@ -215,9 +215,9 @@ public class GoogleGmailController {
         if (success) {
             model.addAttribute("successMessage", "Email sent successfully!");
         }
-        EmailPage emailsPerPage = null;
-        int count = 0;
-        int draft = 0;
+        EmailPage emailsPerPage;
+        int count;
+        int draft;
         try {
             OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
             emailsPerPage = getEmailsByLabel(session, authentication, page, label);
@@ -233,13 +233,13 @@ public class GoogleGmailController {
                 int statusCode = httpResponseException.getStatusCode();
                 if(statusCode == 403){
                     code = "403";
-                    link = "/settings/google-services";
+                    link = "/crm/settings/google-services";
                     buttonText = "Grant Access";
                     message = "Please grant the app access to Gmail  in order to use this service";
                 }
             }else if(page>1){
                 prevPage--;
-                link = "/gmail/emails/" + label + "?page=" + prevPage;
+                link = "/crm/gmail/emails/" + label + "?page=" + prevPage;
                 buttonText = "GO Back";
                 message = "There was a problem retrieving the emails at this page, Please try again later!";
             }
@@ -306,9 +306,9 @@ public class GoogleGmailController {
         }
 
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
-        GmailEmailInfo emailInfo = null;
-        int count = 0;
-        int draft = 0;
+        GmailEmailInfo emailInfo;
+        int count;
+        int draft;
         try {
             count = googleGmailApiService.getEmailsCount(oAuthUser,"in:inbox category:primary is:unread");
             draft = googleGmailApiService.getEmailsCount(oAuthUser,"is:draft");
@@ -324,7 +324,7 @@ public class GoogleGmailController {
                 int statusCode = httpResponseException.getStatusCode();
                 if(statusCode == 403){
                     code = "403";
-                    link = "/settings/google-services";
+                    link = "/crm/settings/google-services";
                     buttonText = "Grant Access";
                     message = "Please grant the app access to Gmail  in order to use this service";
                 }
@@ -350,6 +350,6 @@ public class GoogleGmailController {
 
         gmailEmailService.deleteEmail(oAuthUser, emailId, redirectAttributes);
 
-        return "redirect:/gmail/emails?page=" + page;
+        return "redirect:/crm/gmail/emails?page=" + page;
     }
 }
