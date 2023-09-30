@@ -21,6 +21,10 @@ public class WeatherService {
 
     public WeatherData getWeatherData(String city) {
         String apiUrl = weatherApiUrl + "?key=" + apiKey + "&q=" + city;
-        return restTemplate.getForObject(apiUrl, WeatherData.class);
+        try {
+            return restTemplate.getForObject(apiUrl, WeatherData.class);
+        }catch (RuntimeException e) {
+            return null;
+        }
     }
 }
