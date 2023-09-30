@@ -1,4 +1,4 @@
-package site.easy.to.build.crm.dao;
+package site.easy.to.build.crm.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,6 +11,8 @@ public interface OAuthUserRepository extends JpaRepository<OAuthUser,Integer> {
     public OAuthUser findById(int id);
 
     public OAuthUser getOAuthUserByUser(User user);
+
+    public OAuthUser findByEmail(String email);
 
     public void deleteById(int id);
 }
