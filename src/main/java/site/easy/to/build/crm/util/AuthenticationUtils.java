@@ -1,6 +1,7 @@
 package site.easy.to.build.crm.util;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +25,9 @@ public class AuthenticationUtils {
     private final UserDetailsService crmUserDetails;
     private final UserDetailsService customerUserDetails;
 
-    public AuthenticationUtils(UserService userService, OAuthUserService oAuthUserService, CustomerLoginInfoService customerLoginInfoService, UserDetailsService crmUserDetails, UserDetailsService customerUserDetails) {
+    @Autowired
+    public AuthenticationUtils(UserService userService, OAuthUserService oAuthUserService, CustomerLoginInfoService customerLoginInfoService,
+                               UserDetailsService crmUserDetails, UserDetailsService customerUserDetails) {
         this.userService = userService;
         this.oAuthUserService = oAuthUserService;
         this.customerLoginInfoService = customerLoginInfoService;
@@ -33,6 +36,9 @@ public class AuthenticationUtils {
     }
 
     public OAuthUser getOAuthUserFromAuthentication(Authentication authentication) {
+        if(oAuthUserService == null){
+            return null;
+        }
         String email = ((OAuth2User)authentication.getPrincipal()).getAttribute("email");
         return oAuthUserService.findBtEmail(email);
     }
