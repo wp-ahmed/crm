@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import site.easy.to.build.crm.entity.OAuthUser;
 import site.easy.to.build.crm.google.util.GoogleApiHelper;
 import site.easy.to.build.crm.google.util.GsonUtil;
-import site.easy.to.build.crm.service.OAuthUserService;
+import site.easy.to.build.crm.service.user.OAuthUserService;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
