@@ -10,8 +10,9 @@
 	</parent>
 	<groupId>site.easy.to.build</groupId>
 	<artifactId>crm</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0</version>
 	<name>crm</name>
+	<packaging>war</packaging>
 	<description>Crm System</description>
 	<properties>
 		<java.version>17</java.version>
@@ -143,6 +144,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>crm</finalName>
 	</build>
 
 </project>

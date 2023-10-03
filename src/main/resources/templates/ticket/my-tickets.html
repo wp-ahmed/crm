@@ -98,10 +98,10 @@
                                         <td th:text="${ticket.status}"></td>
                                         <td th:text="${ticket.customer.name}"></td>
                                         <td th:text="${ticket.employee.username}"></td>
-                                        <td><a th:href="'/crm/ticket/show-ticket/' + ${ticket.ticketId}"><i class="fas fa-eye"></i></a></td>
-                                        <td><a th:href="'/crm/ticket/update-ticket/' + ${ticket.ticketId}"><i class="fas fa-edit"></i></a></td>
+                                        <td><a th:href="${home + 'employee/ticket/show-ticket/' + ticket.ticketId}"><i class="fas fa-eye"></i></a></td>
+                                        <td><a th:href="${home + 'employee/ticket/update-ticket/' + ticket.ticketId}"><i class="fas fa-edit"></i></a></td>
                                         <td>
-                                            <form th:action="'/crm/ticket/delete-ticket/' + ${ticket.ticketId}" method="post">
+                                            <form th:action="${home + 'employee/ticket/delete-ticket/' + ticket.ticketId}" method="post">
                                                 <button type="submit" class="btn btn-primary">
                                                     <i class="mdi mdi-delete"></i>
                                                 </button>
@@ -148,6 +148,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

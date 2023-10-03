@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-group m-b-0">
                     <div class="col-sm-12 text-center">
-                        <p>Already have an account? <a href="/login" class="text-info m-l-5"><b>Sign In</b></a></p>
+                        <p>Already have an account? <a th:href="${home + 'login'}" class="text-info m-l-5"><b>Sign In</b></a></p>
                     </div>
                 </div>
             </form>
@@ -88,6 +88,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}"></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script th:src="@{/js/library/popper.min.js}"></script>

@@ -195,12 +195,12 @@
                             <div th:if="${!isGoogleUser}" class="ribbon-wrapper card">
                                 <div class="ribbon ribbon-danger">Calendar Service</div>
                                 <p class="ribbon-content">To be able to display your Google calendar meeting, you have to login to
-                                    your <a href="/oauth2/authorization/google">Google account</a>  and Grant access to calendar service</p>
+                                    your <a th:href="${home + 'oauth2/authorization/google'}">Google account</a>  and Grant access to calendar service</p>
                             </div>
                             <div th:if="${isGoogleUser && !hasCalendarAccess}" class="ribbon-wrapper card">
                                 <div class="ribbon ribbon-danger">Calendar Access</div>
                                 <p class="ribbon-content">Please grant the app access to your <a
-                                        href="/settings/google-services">Google account</a> in order to see your Google Calendar.
+                                        th:href="${home + 'settings/google-services'}">Google account</a> in order to see your Google Calendar.
                                 </p>
                             </div>
                         </div>
@@ -452,6 +452,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript"></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript"></script>

@@ -101,9 +101,9 @@
                                             <td th:text="${customer.email}"></td>
                                             <td th:text="${customer.phone}"></td>
                                             <td th:text="${customer.country}"></td>
-                                            <td><a th:href="'/crm/customer/' + ${customer.customerId}"><i class="fas fa-eye"></i></a></td>
+                                            <td><a th:href="${home + 'employee/customer/' + customer.customerId}"><i class="fas fa-eye"></i></a></td>
                                             <td th:if="${#authorization.expression('hasRole(''ROLE_MANAGER'')')}">
-                                                <form th:action="'/crm/customer/delete-customer/' + ${customer.customerId}" method="post">
+                                                <form th:action="${home + 'employee/customer/delete-customer/' + customer.customerId}" method="post">
                                                     <button type="submit" class="btn btn-primary">
                                                         <i class="mdi mdi-delete"></i>
                                                     </button>
@@ -150,6 +150,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

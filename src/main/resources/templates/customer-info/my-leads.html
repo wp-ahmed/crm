@@ -96,7 +96,7 @@
                                         <td th:text="${lead.status}"></td>
                                         <td th:text="${lead.employee.email}"></td>
                                         <td th:text="${lead.employee.username}"></td>
-                                        <td><a th:href="'/customer/lead/' + ${lead.leadId}"><i class="fas fa-eye"></i></a></td>
+                                        <td><a th:href="${home + 'customer/lead/' + ${lead.leadId}"><i class="fas fa-eye"></i></a></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -138,6 +138,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

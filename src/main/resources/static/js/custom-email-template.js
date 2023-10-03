@@ -31,7 +31,7 @@ $(document).ready(function() {
                     ">
                     <div class="col-md-12">
                         ${selectElement.prop('outerHTML')}
-                        <small>To create a new email template, use this <a href='/crm/email-template/create'>link</a></small>
+                        <small>To create a new email template, use this <a href=${home}'employee/email-template/create'>link</a></small>
                     </div>
                 </div>`;
 
@@ -62,7 +62,7 @@ $(document).ready(function() {
                         ">
                         <div class="col-md-12">
                             ${selectElement.prop('outerHTML')}
-                            <small>To create a new email template, use this <a href='/crm/email-template/create'>link</a></small>
+                            <small>To create a new email template, use this <a href=${home}'employee/email-template/create'>link</a></small>
                         </div>
                     </div>`;
 

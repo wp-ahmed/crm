@@ -44,7 +44,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
-@RequestMapping("/crm/lead")
+@RequestMapping("/employee/lead")
 public class LeadController {
 
     private final LeadService leadService;
@@ -216,12 +216,12 @@ public class LeadController {
         }
 
         if (lead.getStatus().equals("meeting-to-schedule")) {
-            return "redirect:/crm/calendar/create-event?leadId=" + lead.getLeadId();
+            return "redirect:/employee/calendar/create-event?leadId=" + lead.getLeadId();
         }
         if(AuthorizationUtil.hasRole(authentication, "ROLE_MANAGER")) {
-            return "redirect:/crm/lead/created-leads";
+            return "redirect:/employee/lead/created-leads";
         }
-        return "redirect:/crm/lead/assigned-leads";
+        return "redirect:/employee/lead/assigned-leads";
     }
 
     @GetMapping("/update/{id}")
@@ -447,7 +447,7 @@ public class LeadController {
                 }
             }
         }
-        return "redirect:/crm/lead/assigned-leads";
+        return "redirect:/employee/lead/assigned-leads";
     }
 
     @PostMapping("/delete/{id}")
@@ -465,7 +465,7 @@ public class LeadController {
         }
 
         leadService.delete(lead);
-        return "redirect:/crm/lead/created-leads";
+        return "redirect:/employee/lead/created-leads";
     }
 
     @PostMapping("/save-attachment/ajax")

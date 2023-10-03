@@ -81,23 +81,23 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">
                         <div class="social">
 <!--                            <button class="btn  btn-facebook" data-toggle="tooltip" title="Login with Facebook"> <i aria-hidden="true" class="fab fa-facebook-f"></i> </button>-->
-                            <button class="btn btn-googleplus" data-toggle="tooltip" title="Login with Google"> <i aria-hidden="true" class="fab fa-google"></i><a href="/oauth2/authorization/google"> Login with Google</a></button>
+                            <button class="btn btn-googleplus" data-toggle="tooltip" title="Login with Google"> <i aria-hidden="true" class="fab fa-google"></i><a th:href="${home + 'oauth2/authorization/google'}"> Login with Google</a></button>
                         </div>
                     </div>
                 </div>
                 <div class="form-group m-b-0">
                     <div class="col-sm-12 text-center">
-                        Don't have an account? <a href="/register" class="text-primary m-l-5"><b>Sign Up as An employee</b></a>
+                        Don't have an account? <a th:href="${home + 'register'}" class="text-primary m-l-5"><b>Sign Up as An employee</b></a>
                     </div>
                 </div>
                 <div class="form-group m-b-0">
                     <div class="col-sm-12 text-center">
-                        Employees: Forgot your password? Reset it here, <a href="/change-password" class="text-primary m-l-5"><b>Change your password</b></a>
+                        Employees: Forgot your password? Reset it here, <a th:href="${home + 'change-password'}" class="text-primary m-l-5"><b>Change your password</b></a>
                     </div>
                 </div>
                 <div class="form-group m-b-0 m-t-30">
                     <div class="col-sm-12 text-center">
-                        If you are a customer, please use this <a href="/customer-login" class="text-primary m-l-5"><b>link to login</b></a>
+                        If you are a customer, please use this <a th:href="${home + 'customer-login'}" class="text-primary m-l-5"><b>link to login</b></a>
                     </div>
                 </div>
             </form>
@@ -128,6 +128,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

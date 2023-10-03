@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Controller
-@RequestMapping("/crm/settings")
+@RequestMapping("/employee/settings")
 public class GoogleSettingsController {
 
     final GoogleAccessService googleAccessService;

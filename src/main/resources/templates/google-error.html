@@ -37,10 +37,10 @@
             <p class="text-muted m-t-30 m-b-30">In order to use the Google services please login using your Google Account</p>
             <button class="btn btn-googleplus" data-toggle="tooltip" title="Login with Google">
                 <i aria-hidden="true" class="fab fa-google"></i>
-                <a href="/oauth2/authorization/google"> Login with Google</a>
+                <a th:href="${home + 'oauth2/authorization/google'}"> Login with Google</a>
             </button>
             <span> OR </span>
-            <a href="/" class="btn btn-info btn-rounded waves-effect waves-light">Go Home</a>
+            <a th:href="${home}" class="btn btn-info btn-rounded waves-effect waves-light">Go Home</a>
         </div>
 
     </div>
@@ -51,6 +51,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

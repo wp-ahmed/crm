@@ -79,7 +79,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <!-- checkbox -->
-                                                <a href="/calendar/create-event" class="btn m-t-10 btn-info btn-block waves-effect waves-light">
+                                                <a th:href="${home + 'employee/calendar/create-event'}" class="btn m-t-10 btn-info btn-block waves-effect waves-light">
                                                     <i class="ti-plus"></i> Add New Event
                                                 </a>
                                             </div>
@@ -183,6 +183,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript"></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript"></script>

@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 @Controller
-@RequestMapping("/crm/settings")
+@RequestMapping("/employee/settings")
 public class EmailSettingsController {
 
     private final AuthenticationUtils authenticationUtils;
@@ -133,7 +133,7 @@ public class EmailSettingsController {
                 TicketEmailSettings ticketEmailSettings = new TicketEmailSettings();
                 if (!processEmailSettings(ticketEmailSettings, formParams)) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Please select an email template before proceeding.");
-                    return "redirect:/crm/settings/email/" + entity;
+                    return "redirect:/employee/settings/email/" + entity;
                 }
                 ticketEmailSettings.setUser(user);
                 ticketEmailSettingsService.save(ticketEmailSettings);
@@ -142,7 +142,7 @@ public class EmailSettingsController {
                 LeadEmailSettings leadEmailSettings = new LeadEmailSettings();
                 if (!processEmailSettings(leadEmailSettings, formParams)) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Please select an email template before proceeding.");
-                    return "redirect:/crm/settings/email/" + entity;
+                    return "redirect:/employee/settings/email/" + entity;
                 }
                 leadEmailSettings.setUser(user);
                 leadEmailSettingsService.save(leadEmailSettings);
@@ -151,7 +151,7 @@ public class EmailSettingsController {
                 ContractEmailSettings contractEmailSettings = new ContractEmailSettings();
                 if (!processEmailSettings(contractEmailSettings, formParams)) {
                     redirectAttributes.addFlashAttribute("errorMessage", "Please select an email template before proceeding.");
-                    return "redirect:/crm/settings/email/" + entity;
+                    return "redirect:/employee/settings/email/" + entity;
                 }
                 contractEmailSettings.setUser(user);
                 contractEmailSettingsService.save(contractEmailSettings);
@@ -161,7 +161,7 @@ public class EmailSettingsController {
                 return "error/404";
             }
         }
-        return "redirect:/crm/settings/email/" + entity;
+        return "redirect:/employee/settings/email/" + entity;
     }
 
     private boolean processEmailSettings(EmailSettings emailSettings, Map<String, String> formParams) {

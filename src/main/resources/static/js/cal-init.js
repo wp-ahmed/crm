@@ -116,7 +116,7 @@ function initializePickers() {
 
         $.ajax({
                type: 'POST',
-               url: '/crm/calendar/ajax-update-event',
+               url: home+'employee/calendar/ajax-update-event',
                data: formData,
                processData: false,
                contentType: false,
@@ -145,7 +145,7 @@ function initializePickers() {
         var id;
         $.ajax({
                type: 'POST',
-               url: '/crm/calendar/ajax-create-event',
+               url: home+'employee/calendar/ajax-create-event',
                data: formData,
                processData: false,
                contentType: false,
@@ -230,7 +230,7 @@ function initializePickers() {
                 formData.append('id',calEvent.id);
                 $.ajax({
                        type: 'POST',
-                       url: '/crm/calendar/ajax-delete-event',
+                       url: home+'employee/calendar/ajax-delete-event',
                        data: formData,
                        processData: false,
                        contentType: false,

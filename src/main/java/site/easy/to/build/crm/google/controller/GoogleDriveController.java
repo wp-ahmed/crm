@@ -24,7 +24,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/crm/drive")
+@RequestMapping("/employee/drive")
 public class GoogleDriveController {
 
     private final GoogleDriveApiService googleDriveApiService;
@@ -70,7 +70,7 @@ public class GoogleDriveController {
         } catch (IOException | GeneralSecurityException e) {
             bindingResult.rejectValue("failedErrorMessage", "error.failedErrorMessage","There are might be a problem retrieving the file information, please try again later!");
             redirectAttributes.addFlashAttribute("bindingResult", bindingResult);
-            return "redirect:/crm/drive/list-files";
+            return "redirect:/employee/drive/list-files";
         }
         model.addAttribute("files", files);
         return "google-drive/list-files-in-folder";
@@ -84,7 +84,7 @@ public class GoogleDriveController {
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
         if(!oAuthUser.getGrantedScopes().contains("https://www.googleapis.com/auth/drive.file")) {
             String code = "403";
-            String link = "/settings/google-services";
+            String link = "employee/settings/google-services";
             String buttonText = "Grant Access";
             String message = "Please grant the app access to Google Drive, in order to use this service";
             model.addAttribute("link",link);
@@ -111,7 +111,7 @@ public class GoogleDriveController {
         } catch (GeneralSecurityException | IOException e) {
             return handleGoogleDriveApiException(model,e);
         }
-        return "redirect:/crm/drive/list-files";
+        return "redirect:/employee/drive/list-files";
     }
     @GetMapping("/create-file")
     public String showFileCreationForm(Model model, Authentication authentication){
@@ -153,7 +153,7 @@ public class GoogleDriveController {
         } catch (GeneralSecurityException | IOException e) {
             return handleGoogleDriveApiException(model,e);
         }
-        return "redirect:/crm/drive/list-files";
+        return "redirect:/employee/drive/list-files";
     }
 
     @PostMapping("/ajax-share")
@@ -197,7 +197,7 @@ public class GoogleDriveController {
     }
 
     private String handleGoogleDriveApiException(Model model, Exception e){
-        String link = "/";
+        String link = "";
         String buttonText = "Go Home";
         String message = "There was a problem with Google Drive, Please try again later!";
         String code = "400";
@@ -205,7 +205,7 @@ public class GoogleDriveController {
             int statusCode = httpResponseException.getStatusCode();
             if(statusCode == 403){
                 code = "403";
-                link = "/settings/google-services";
+                link = "employee/settings/google-services";
                 buttonText = "Grant Access";
                 message = "Please grant the app access to Google Drive, in order to use this service";
             }

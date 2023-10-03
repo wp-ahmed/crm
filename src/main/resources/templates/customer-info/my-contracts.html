@@ -98,7 +98,7 @@
                                         <td th:text="${contract.user.username}"></td>
                                         <td th:text="${contract.startDate}"></td>
                                         <td th:text="${contract.endDate}"></td>
-                                        <td><a th:href="'/customer/contract/' + ${contract.contractId}"><i class="fas fa-eye"></i></a></td>
+                                        <td><a th:href="${home + 'customer/contract/' + ${contract.contractId}"><i class="fas fa-eye"></i></a></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -140,6 +140,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

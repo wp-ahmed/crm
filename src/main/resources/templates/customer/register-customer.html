@@ -36,7 +36,7 @@
 <section id="wrapper" class="login-register login-sidebar" th:style="'background:url(' + @{/images/login-register.jpg} + ');'">
     <div class="login-box card">
         <div class="card-body">
-            <form class="form-horizontal form-material" id="loginform" th:action="@{/crm/customer/register-customer}" th:object="${customer}" method="post">
+            <form class="form-horizontal form-material" id="loginform" th:action="@{/employee/customer/register-customer}" th:object="${customer}" method="post">
                 <div class="text-center">
                     <a href="javascript:void(0)" class="db"><img th:src="@{images/logo-icon.png}" alt="Home" /><br/><img th:src="@{/images/logo-text.png}" alt="Home" /></a>
                 </div>
@@ -73,6 +73,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}"></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script th:src="@{/js/library/popper.min.js}"></script>

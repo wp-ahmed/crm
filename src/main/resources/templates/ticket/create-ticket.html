@@ -70,7 +70,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Create New Ticket</h4>
-                            <form th:object="${ticket}" th:action="@{/crm/ticket/create-ticket}" method="post">
+                            <form th:object="${ticket}" th:action="@{/employee/ticket/create-ticket}" method="post">
 
                                 <label class="m-t-20" for="subject">Subject:</label>
                                 <div class="input-group">
@@ -175,6 +175,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

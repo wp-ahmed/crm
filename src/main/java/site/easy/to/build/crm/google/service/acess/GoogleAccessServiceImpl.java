@@ -114,7 +114,7 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
         }
 
 
-        return "redirect:/crm/settings/google-services";
+        return "redirect:/employee/settings/google-services";
     }
 
     public void verifyAccessAndHandleRevokedToken(OAuthUser oAuthUser, User user, List<String> scopesToCheck) throws IOException {

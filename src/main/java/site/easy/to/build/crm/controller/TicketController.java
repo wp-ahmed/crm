@@ -31,7 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
-@RequestMapping("/crm/ticket")
+@RequestMapping("/employee/ticket")
 public class TicketController {
 
     private final TicketService ticketService;
@@ -171,7 +171,7 @@ public class TicketController {
 
         ticketService.save(ticket);
 
-        return "redirect:/crm/ticket/assigned-tickets";
+        return "redirect:/employee/ticket/assigned-tickets";
     }
 
     @GetMapping("/update-ticket/{id}")
@@ -297,7 +297,7 @@ public class TicketController {
             }
         }
 
-        return "redirect:/crm/ticket/assigned-tickets";
+        return "redirect:/employee/ticket/assigned-tickets";
     }
 
     @PostMapping("/delete-ticket/{id}")
@@ -316,7 +316,7 @@ public class TicketController {
         }
 
         ticketService.delete(ticket);
-        return "redirect:/crm/ticket/assigned-tickets";
+        return "redirect:/employee/ticket/assigned-tickets";
     }
 
     private void processEmailSettingsChanges(Map<String, Pair<String, String>> changes, int userId, OAuthUser oAuthUser,

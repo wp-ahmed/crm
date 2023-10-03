@@ -70,7 +70,7 @@ public class SecurityConfig {
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/**/manager/**")).hasRole("MANAGER")
-                        .requestMatchers("/crm/**").hasAnyRole("MANAGER", "EMPLOYEE")
+                        .requestMatchers("/employee/**").hasAnyRole("MANAGER", "EMPLOYEE")
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
                 )
@@ -90,7 +90,10 @@ public class SecurityConfig {
                 ).logout((logout) -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
-                        .permitAll()).exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+                        .permitAll())
+                .exceptionHandling(exception -> {
+                    exception.accessDeniedHandler(accessDeniedHandler());
+                });
 
 
         return http.build();

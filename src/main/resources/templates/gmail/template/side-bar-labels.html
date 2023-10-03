@@ -1,22 +1,22 @@
 
     <div class="card-body inbox-panel">
-        <a href="/crm/gmail/send" class="btn btn-danger m-b-20 p-10 btn-block waves-effect waves-light">Compose</a>
+        <a th:href="${home + 'employee/gmail/send'}" class="btn btn-danger m-b-20 p-10 btn-block waves-effect waves-light">Compose</a>
         <ul class="list-group list-group-full">
             <li th:class="${label == null ? 'list-group-item active' : 'list-group-item'}">
-                <a href="/crm/gmail/emails"><i class="mdi mdi-gmail"></i> Inbox </a>
+                <a th:href="${home + 'employee/gmail/emails'}"><i class="mdi mdi-gmail"></i> Inbox </a>
                 <span th:text="${count}" class="badge badge-success ml-auto"></span>
             </li>
             <li th:class="${label == 'starred' ? 'list-group-item active' : 'list-group-item'}">
-                <a href="/crm/gmail/emails/starred"> <i class="mdi mdi-star"></i> Starred </a>
+                <a th:href="${home + 'employee/gmail/emails/starred'}"> <i class="mdi mdi-star"></i> Starred </a>
             </li>
             <li th:class="${label == 'draft' ? 'list-group-item active' : 'list-group-item'}">
-                <a href="/crm/gmail/emails/draft"> <i class="mdi mdi-send"></i> Draft </a>
+                <a th:href="${home + 'employee/gmail/emails/draft'}"> <i class="mdi mdi-send"></i> Draft </a>
                 <span class="badge badge-danger ml-auto" th:text="${draft}"></span></li>
             <li th:class="${label == 'sent' ? 'list-group-item active' : 'list-group-item'}">
-                <a href="/crm/gmail/emails/sent"> <i class="mdi mdi-file-document-box"></i> Sent Mail </a>
+                <a th:href="${home + 'employee/gmail/emails/sent'}"> <i class="mdi mdi-file-document-box"></i> Sent Mail </a>
             </li>
             <li th:class="${label == 'trash' ? 'list-group-item active' : 'list-group-item'}">
-                <a href="/crm/gmail/emails/trash"> <i class="mdi mdi-delete"></i> Trash </a>
+                <a th:href="${home + 'employee/gmail/emails/trash'}"> <i class="mdi mdi-delete"></i> Trash </a>
             </li>
         </ul>
     </div>

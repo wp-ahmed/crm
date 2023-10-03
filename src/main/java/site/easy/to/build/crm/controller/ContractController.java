@@ -42,7 +42,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
-@RequestMapping("/crm/contract")
+@RequestMapping("/employee/contract")
 public class ContractController {
 
     private final ContractService contractService;
@@ -261,7 +261,7 @@ public class ContractController {
             fileUtil.saveGoogleDriveFiles(authentication, allFiles, folderId, createdContract);
         }
 
-        return "redirect:/crm/contract/my-contracts";
+        return "redirect:/employee/contract/my-contracts";
     }
 
     @GetMapping("/update/{id}")
@@ -441,7 +441,7 @@ public class ContractController {
                 }
             }
         }
-        return "redirect:/crm/contract/my-contracts";
+        return "redirect:/employee/contract/my-contracts";
     }
 
     @PostMapping("/delete/{id}")
@@ -459,7 +459,7 @@ public class ContractController {
         }
 
         contractService.delete(contract);
-        return "redirect:/crm/contract/my-contracts";
+        return "redirect:/employee/contract/my-contracts";
     }
 
     private void processEmailSettingsChanges(Map<String, Pair<String, String>> changes, int userId, OAuthUser oAuthUser,

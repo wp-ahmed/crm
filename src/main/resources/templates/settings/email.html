@@ -85,7 +85,7 @@
                                 <h3 class="text-danger"><i class="fa fa-exclamation-circle"></i> Not Allowed
                                 </h3><span th:text="${errorMessage}"></span>
                             </div>
-                            <form th:if="${isGoogleUser  && gmailAccess}" method="post" th:object="${emailSettings}" th:action="'/crm/settings/email/' + ${entity}">
+                            <form th:if="${isGoogleUser  && gmailAccess}" method="post" th:object="${emailSettings}" th:action="${home + 'employee/settings/email/' + entity}">
                                 <input type="hidden" th:field="*{id}" name="id" id="id">
                                 <div class="row m-t-40">
                                     <div class="col-md-12">
@@ -110,13 +110,13 @@
                                 <div class="ribbon ribbon-danger">Email Service</div>
                                 <p class="ribbon-content">To send emails, we only offer Gmail server for now, but we
                                     will be adding more features in the future. To send emails, please log in with
-                                    your <a href="/oauth2/authorization/google">Google account</a></p>
+                                    your <a th:href="${home + 'oauth2/authorization/google'}">Google account</a></p>
                             </div>
                             <div th:if="${isGoogleUser && !gmailAccess}" class="ribbon-wrapper card">
                                 <h4 class="card-title">Provider of email sending services</h4>
                                 <div class="ribbon ribbon-danger">Gmail Access</div>
                                 <p class="ribbon-content">Please grant the app access to your <a
-                                        href="/crm/settings/google-services">Gmail account</a> in order to send emails
+                                        th:href="${home + 'employee/settings/google-services'}">Gmail account</a> in order to send emails
                                 </p>
                             </div>
                         </div>
@@ -158,6 +158,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

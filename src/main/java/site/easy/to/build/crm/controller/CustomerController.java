@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
-@RequestMapping("/crm/customer")
+@RequestMapping("/employee/customer")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -172,7 +172,7 @@ public class CustomerController {
             String url = baseUrl + "set-password?token=" + customerLoginInfo.getToken();
             EmailTokenUtils.sendRegistrationEmail(customerLoginInfo1.getEmail(), customer.getName(), url, oAuthUser, googleGmailApiService);
         }
-        return "redirect:/crm/customer/my-customers";
+        return "redirect:/employee/customer/my-customers";
     }
 
     @PostMapping("/delete-customer/{id}")
@@ -190,7 +190,7 @@ public class CustomerController {
                 bindingResult.rejectValue("failedErrorMessage", "error.failedErrorMessage",
                         "Sorry, you are not authorized to delete this customer. Only administrators have permission to delete customers.");
                 redirectAttributes.addFlashAttribute("bindingResult", bindingResult);
-                return "redirect:/crm/customer/my-customers";
+                return "redirect:/employee/customer/my-customers";
             }
 
             customer = customerService.findByCustomerId(id);
@@ -206,7 +206,7 @@ public class CustomerController {
         } catch (Exception e){
             return "error/500";
         }
-        return "redirect:/crm/customer/my-customers";
+        return "redirect:/employee/customer/my-customers";
     }
 
 

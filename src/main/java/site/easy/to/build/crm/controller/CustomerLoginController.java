@@ -5,21 +5,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import site.easy.to.build.crm.entity.Customer;
 import site.easy.to.build.crm.entity.CustomerLoginInfo;
 import site.easy.to.build.crm.service.customer.CustomerLoginInfoService;
-import site.easy.to.build.crm.service.customer.CustomerService;
 
 @Controller
 public class CustomerLoginController {
 
     private final CustomerLoginInfoService customerLoginInfoService;
-    private final CustomerService customerService;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomerLoginController(CustomerLoginInfoService customerLoginInfoService, CustomerService customerService, PasswordEncoder passwordEncoder) {
+    public CustomerLoginController(CustomerLoginInfoService customerLoginInfoService, PasswordEncoder passwordEncoder) {
         this.customerLoginInfoService = customerLoginInfoService;
-        this.customerService = customerService;
         this.passwordEncoder = passwordEncoder;
     }
 

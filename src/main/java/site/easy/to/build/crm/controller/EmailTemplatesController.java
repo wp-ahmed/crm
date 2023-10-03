@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/crm/email-template")
+@RequestMapping("/employee/email-template")
 public class EmailTemplatesController {
 
     private final EntityManager entityManager;
@@ -214,7 +214,7 @@ public class EmailTemplatesController {
         deleteEmailTemplateAssociatedWithEntity(id, leadEmailSettings, Lead.class);
 
         emailTemplateService.delete(id);
-        return "redirect:/crm/email-template/my-templates";
+        return "redirect:/employee/email-template/my-templates";
     }
 
     private <T> void deleteEmailTemplateAssociatedWithEntity(int templateId, EmailSettings emailSettings, Class<T> tClass)

@@ -36,7 +36,7 @@ import java.security.GeneralSecurityException;
 import java.util.*;
 
 @Controller
-@RequestMapping("/crm/gmail")
+@RequestMapping("/employee/gmail")
 public class GoogleGmailController {
     private final AuthenticationUtils authenticationUtils;
     private final GmailEmailService gmailEmailService;
@@ -60,7 +60,7 @@ public class GoogleGmailController {
         }
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
         if(!oAuthUser.getGrantedScopes().contains("https://www.googleapis.com/auth/gmail.modify")){
-            String link = "/crm/settings/google-services";
+            String link = "employee/settings/google-services";
             String code = "403";
             String buttonText = "Grant Access";
             String message = "Please grant the app access to Gmail  in order to use this service";
@@ -114,7 +114,7 @@ public class GoogleGmailController {
             bindingResult.addError(emailFailingError);
             return "gmail/email-form";
         }
-        return "redirect:/crm/gmail/emails/sent?success=true";
+        return "redirect:/employee/gmail/emails/sent?success=true";
     }
 
     @PostMapping("/draft/ajax")
@@ -157,7 +157,7 @@ public class GoogleGmailController {
             draft = googleGmailApiService.getEmailsCount(oAuthUser,"is:draft");
             googleGmailApiService.getEmailsCount(oAuthUser, "in:inbox category:primary is:unread");
         }catch (GeneralSecurityException | IOException e) {
-            String link = "/";
+            String link = "";
             String code = "400";
             String buttonText = "Go Home";
             String message = "There was a problem retrieving the emails now, Please try again later!";
@@ -166,13 +166,13 @@ public class GoogleGmailController {
                 int statusCode = httpResponseException.getStatusCode();
                 if(statusCode == 403){
                     code = "403";
-                    link = "/crm/settings/google-services";
+                    link = "employee/settings/google-services";
                     buttonText = "Grant Access";
                     message = "Please grant the app access to Gmail  in order to use this service";
                 }
             }else if(page>1){
                 prevPage--;
-                link = "/crm/gmail/emails?page="+prevPage;
+                link = "employee/gmail/emails?page="+prevPage;
                 buttonText = "GO Back";
                 message = "There was a problem retrieving the emails at this page, Please try again later!";
             }
@@ -225,7 +225,7 @@ public class GoogleGmailController {
             draft = googleGmailApiService.getEmailsCount(oAuthUser,"is:draft");
         }catch (GeneralSecurityException | IOException e) {
             int prevPage = page;
-            String link = "/";
+            String link = "";
             String buttonText = "Go Home";
             String message = "There was a problem retrieving the emails now, Please try again later!";
             String code = "400";
@@ -233,13 +233,13 @@ public class GoogleGmailController {
                 int statusCode = httpResponseException.getStatusCode();
                 if(statusCode == 403){
                     code = "403";
-                    link = "/crm/settings/google-services";
+                    link = "employee/settings/google-services";
                     buttonText = "Grant Access";
                     message = "Please grant the app access to Gmail  in order to use this service";
                 }
             }else if(page>1){
                 prevPage--;
-                link = "/crm/gmail/emails/" + label + "?page=" + prevPage;
+                link = "employee/gmail/emails/" + label + "?page=" + prevPage;
                 buttonText = "GO Back";
                 message = "There was a problem retrieving the emails at this page, Please try again later!";
             }
@@ -316,7 +316,7 @@ public class GoogleGmailController {
             googleGmailApiService.updateEmail(oAuthUser,emailId);
 
         } catch (GeneralSecurityException | IOException e) {
-            String link = "/";
+            String link = "";
             String buttonText = "Go Home";
             String message = "There was a problem retrieving the email now, Please try again later!";
             String code = "400";
@@ -324,7 +324,7 @@ public class GoogleGmailController {
                 int statusCode = httpResponseException.getStatusCode();
                 if(statusCode == 403){
                     code = "403";
-                    link = "/crm/settings/google-services";
+                    link = "employee/settings/google-services";
                     buttonText = "Grant Access";
                     message = "Please grant the app access to Gmail  in order to use this service";
                 }
@@ -350,6 +350,6 @@ public class GoogleGmailController {
 
         gmailEmailService.deleteEmail(oAuthUser, emailId, redirectAttributes);
 
-        return "redirect:/crm/gmail/emails?page=" + page;
+        return "redirect:/employee/gmail/emails?page=" + page;
     }
 }

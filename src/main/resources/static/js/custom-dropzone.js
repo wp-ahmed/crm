@@ -20,7 +20,7 @@ $(document).ready(function () {
 
     Dropzone.autoDiscover = false;
     const myDropzone = new Dropzone('#my-dropzone', {
-        url: '/gmail/upload',
+        url: home+'employee/gmail/upload',
         maxFilesize: 10, // MB
         parallelUploads: 2,
         addRemoveLinks: true,
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: 'POST',
-            url: '/gmail/draft/ajax',
+            url: home+'employee/gmail/draft/ajax',
             data: formData,
             processData: false,
             contentType: false,

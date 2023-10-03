@@ -95,8 +95,8 @@
                                         <td th:text="${profile.username}"></td>
                                         <td th:text="${profile.status}"></td>
                                         <td th:text="${profile.roles[0].name}"></td>
-                                        <td><a th:href="'/manager/show-user/' + ${profile.id}"><i class="fas fa-eye"></i></a></td>
-                                        <td><a th:href="'/manager/update-user/' + ${profile.id}"><i class="fas fa-edit"></i></a></td>
+                                        <td><a th:href="${home + 'manager/show-user/' + profile.id}"><i class="fas fa-eye"></i></a></td>
+                                        <td><a th:href="${home + 'manager/update-user/' + profile.id}"><i class="fas fa-edit"></i></a></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -138,6 +138,10 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
+
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

@@ -90,12 +90,12 @@
                                     <tr th:if="${emailTemplates != null}" th:each="emailTemplate : ${emailTemplates}">
                                         <td th:text="${emailTemplate.templateId}"></td>
                                         <td th:text="${emailTemplate.name}"></td>
-                                        <td><a th:href="'/crm/email-template/show/' + ${emailTemplate.templateId}"><i
+                                        <td><a th:href="${home + 'employee/email-template/show/' + emailTemplate.templateId}"><i
                                                 class="fas fa-eye"></i></a></td>
-                                        <td><a th:href="'/crm/email-template/update/' + ${emailTemplate.templateId}"><i
+                                        <td><a th:href="${home + 'employee/email-template/update/' + emailTemplate.templateId}"><i
                                                 class="fas fa-edit"></i></a></td>
                                         <td>
-                                            <form th:action="'/crm/email-template/delete/' + ${emailTemplate.templateId}"
+                                            <form th:action="${home + 'employee/email-template/delete/' + emailTemplate.templateId}"
                                                   method="post" onsubmit="return confirmDeletion()">
                                                 <button type="submit" class="btn btn-primary">
                                                     <i class="mdi mdi-delete"></i>
@@ -143,6 +143,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

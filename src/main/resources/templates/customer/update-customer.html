@@ -71,7 +71,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Update Customer</h4>
-                            <form th:object="${customer}" th:action="@{/crm/customer/update-customer}" method="post">
+                            <form th:object="${customer}" th:action="@{/employee/customer/update-customer}" method="post">
                                 <input type="hidden" name="customerId" th:field="*{customerId}">
                                 <input type="hidden" name="profileId" th:value="${customerLoginInfo.id}">
                                 <label class="m-t-20" for="name">name:</label>
@@ -209,6 +209,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

@@ -73,7 +73,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Create Customer</h4>
-                            <form th:object="${customer}" th:action="@{/crm/customer/create-customer}" method="post">
+                            <form th:object="${customer}" th:action="@{/employee/customer/create-customer}" method="post">
 
                                 <label class="m-t-20" for="name">name:</label>
                                 <div class="input-group">
@@ -153,12 +153,12 @@
                                 <div th:if="${!isGoogleUser}" class="ribbon-wrapper card">
                                     <div class="ribbon ribbon-danger">Email Service</div>
                                     <p class="ribbon-content">To send emails customer a registration link, please log in with
-                                        your <a href="/oauth2/authorization/google" target="_blank">Google account</a></p>
+                                        your <a th:href="${home + 'oauth2/authorization/google'}" target="_blank">Google account</a></p>
                                 </div>
                                 <div th:if="${isGoogleUser && !hasGoogleGmailAccess}" class="ribbon-wrapper card">
                                     <div class="ribbon ribbon-danger">Gmail Access</div>
                                     <p class="ribbon-content">In order to send customer a registration link, you have to grant the app access to your <a
-                                            href="/crm/settings/google-services" target="_blank">Gmail account</a>
+                                            th:href="${home + 'employee/settings/google-services'}" target="_blank">Gmail account</a>
                                     </p>
                                 </div>
                                 <button type="submit" class="btn btn-primary m-t-20">Create Customer</button>
@@ -200,6 +200,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

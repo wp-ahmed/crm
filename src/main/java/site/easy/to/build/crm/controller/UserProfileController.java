@@ -14,7 +14,7 @@ import site.easy.to.build.crm.service.user.UserService;
 import site.easy.to.build.crm.util.AuthenticationUtils;
 
 @Controller
-@RequestMapping("/crm/profile")
+@RequestMapping("/employee/profile")
 public class UserProfileController {
 
 
@@ -46,6 +46,6 @@ public class UserProfileController {
         User user = userService.findById(userId);
         profile.setUser(user);
         userProfileService.save(profile);
-        return "redirect:/crm/profile";
+        return "redirect:/employee/profile";
     }
 }

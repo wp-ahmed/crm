@@ -178,7 +178,7 @@ public class OAuthLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
             } else if (user.getStatus().equals("suspended")) {
                 response.sendRedirect("/account-suspended");
             } else {
-                response.sendRedirect("/crm/settings/google-services");
+                response.sendRedirect("/employee/settings/google-services");
             }
         }
     }

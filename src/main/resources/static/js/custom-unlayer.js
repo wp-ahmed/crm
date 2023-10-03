@@ -28,7 +28,7 @@ $(document).ready(function() {
     $('#saveButton').click(function() {
         var names = $("#name").val();
         if(!names.trim()) {
-            window.location.href = "/crm/email-template/create?error=name";
+            window.location.href = home+"employee/email-template/create?error=name";
             return;
         }
         unlayer.exportHtml(function(data) {
@@ -36,12 +36,12 @@ $(document).ready(function() {
             var jsonDesign = JSON.stringify(data.design);
             var dataN = JSON.parse(jsonDesign);
             if (dataN.body.rows[0].columns[0].contents.length === 0) {
-                window.location.href = "/crm/email-template/create?error=content";
+                window.location.href = home+"employee/email-template/create?error=content";
                 return;
             }
             $.ajax({
                 type: "POST",
-                url: "/crm/email-template/create",
+                url: home+"employee/email-template/create",
                 processData: false,
                 contentType: false,
                 headers: {
@@ -54,12 +54,12 @@ $(document).ready(function() {
                     jsonDesign: jsonDesign
                 }),
                 success: function(response) {
-                    window.location.href = "/crm/email-template/my-templates";
+                    window.location.href = home+"employee/email-template/my-templates";
                 },
                 error: function(xhr, status, error) {
                     var errorMessage = xhr.responseText;
                     if (errorMessage) {
-                        window.location.href = "/crm/email-template/create?error=unique";
+                        window.location.href = home+"employee/email-template/create?error=unique";
                     }
                 }
             });
@@ -67,10 +67,11 @@ $(document).ready(function() {
     });
 
     $('#updateButton').click(function() {
-        var name = $("#name").val();
+        var names = $("#name").val();
+        console.log(names);
         var id = emailTemplate.templateId;
         if(!names.trim()) {
-            window.location.href = "/crm/email-template/update/"+id+"?error=name";
+            window.location.href = home+"employee/email-template/update/"+id+"?error=name";
             return;
         }
         unlayer.exportHtml(function(data) {
@@ -78,12 +79,12 @@ $(document).ready(function() {
             var jsonDesign = JSON.stringify(data.design);
             var dataN = JSON.parse(jsonDesign);
             if (dataN.body.rows[0].columns[0].contents.length === 0)  {
-                window.location.href = "/crm/email-template/update/"+id+"?error=content";
+                window.location.href = home+"employee/email-template/update/"+id+"?error=content";
                 return;
             }
             $.ajax({
                 type: "POST",
-                url: "/crm/email-template/update",
+                url: home+"employee/email-template/update",
                 processData: false,
                 contentType: false,
                 headers: {
@@ -93,16 +94,16 @@ $(document).ready(function() {
                 data: JSON.stringify({
                     id: id,
                     content: content,
-                    name: name,
+                    name: names,
                     jsonDesign: jsonDesign
                 }),
                 success: function(response) {
-                    window.location.href = "/crm/email-template/my-templates";
+                    window.location.href = home+"employee/email-template/my-templates";
                 },
                 error: function(xhr, status, error) {
                     var errorMessage = xhr.responseText;
                     if (errorMessage) {
-                        window.location.href = "/crm/email-template/update/"+id+"?error=unique";
+                        window.location.href = home+"employee/email-template/update/"+id+"?error=unique";
                     }
                 }
             });

@@ -132,7 +132,7 @@
                             </div>
                             <div class="tab-pane" id="settings" role="tabpanel">
                                 <div class="card-body">
-                                    <form th:object="${profile}" th:action="@{/crm/profile/update}" method="post">
+                                    <form th:object="${profile}" th:action="@{/employee/profile/update}" method="post">
                                         <input type="hidden" name="id" th:field="*{id}">
                                         <input th:if="${profile.oathUserImageLink != null}" type="hidden" name="oathUserImageLink" th:field="*{oathUserImageLink}">
                                         <label class="m-t-20" for="firstName">First Name:</label>
@@ -265,6 +265,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

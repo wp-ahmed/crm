@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller
-@RequestMapping("/crm/calendar")
+@RequestMapping("/employee/calendar")
 public class GoogleCalendarController {
 
     final private GoogleCalendarApiService googleCalendarApiService;
@@ -78,7 +78,7 @@ public class GoogleCalendarController {
         OAuthUser oAuthUser = authenticationUtils.getOAuthUserFromAuthentication(authentication);
         if(!oAuthUser.getGrantedScopes().contains(GoogleAccessService.SCOPE_CALENDAR)) {
             String code = "403";
-            String link = "/settings/google-services";
+            String link = "employee/settings/google-services";
             String buttonText = "Grant Access";
             String message = "Please grant the app access to Google Drive, in order to use this service";
             model.addAttribute("link",link);
@@ -161,7 +161,7 @@ public class GoogleCalendarController {
         } catch (IOException | GeneralSecurityException e) {
             return handleGoogleCalendarApiException(model,e);
         }
-        return "redirect:/crm/calendar/list-events";
+        return "redirect:/employee/calendar/list-events";
     }
 
     @PostMapping("/ajax-create-event")
@@ -300,7 +300,7 @@ public class GoogleCalendarController {
         } catch (IOException | GeneralSecurityException e) {
             return handleGoogleCalendarApiException(model,e);
         }
-        return "redirect:/crm/calendar/list-events";
+        return "redirect:/employee/calendar/list-events";
     }
 
     @RequestMapping("/ajax-delete-event")
@@ -315,7 +315,7 @@ public class GoogleCalendarController {
         return ResponseEntity.ok("Success");
     }
     private String handleGoogleCalendarApiException(Model model, Exception e){
-        String link = "/";
+        String link = "";
         String buttonText = "Go Home";
         String message = "There was a problem with Google Calendar, Please try again later!";
         String code = "400";
@@ -323,7 +323,7 @@ public class GoogleCalendarController {
             int statusCode = httpResponseException.getStatusCode();
             if(statusCode == 403){
                 code = "403";
-                link = "/settings/google-services";
+                link = "employee/settings/google-services";
                 buttonText = "Grant Access";
                 message = "Please grant the app access to Google Calendar, in order to use this service";
             }

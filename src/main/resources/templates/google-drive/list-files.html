@@ -103,7 +103,7 @@
                                                 </div>
                                                 <div class="el-card-content">
                                                     <h3 class="box-title m-t-20">
-                                                        <a class="file-name" th:href="'/crm/drive/folder/'+${folder.id}" th:text="${folder.name}"></a>
+                                                        <a class="file-name" th:href="${home + 'employee/drive/folder/'+folder.id}" th:text="${folder.name}"></a>
                                                         <div class="btn-group dropright">
                                                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <img style="height: 24px;" th:src="@{/images/dots.png}">
@@ -230,6 +230,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!--    &lt;!&ndash; Bootstrap tether Core JavaScript &ndash;&gt;-->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>

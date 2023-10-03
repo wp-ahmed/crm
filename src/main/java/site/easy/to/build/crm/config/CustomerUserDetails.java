@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import site.easy.to.build.crm.entity.CustomerLoginInfo;
 import site.easy.to.build.crm.entity.Role;
 import site.easy.to.build.crm.repository.CustomerLoginInfoRepository;
-import site.easy.to.build.crm.service.customer.CustomerLoginInfoService;
 import site.easy.to.build.crm.service.role.RoleService;
 
 import java.util.ArrayList;

@@ -20,7 +20,7 @@ $(document).ready(function () {
     }
     Dropzone.autoDiscover = false;
     const myDropzone = new Dropzone('#my-dropzone', {
-        url: '/crm/lead/upload',
+        url: home+'employee/lead/upload',
         maxFilesize: 10, // MB
         parallelUploads: 2,
         addRemoveLinks: true,
@@ -118,7 +118,7 @@ function saveAttachments() {
 
         $.ajax({
             type: 'POST',
-            url: '/crm/lead/save-attachment/ajax',
+            url: home+'employee/lead/save-attachment/ajax',
             data: formData,
             processData: false,
             contentType: false,
@@ -198,7 +198,7 @@ function saveAttachments() {
         console.log("sa");
         $.ajax({
             type: 'POST',
-            url: '/crm/lead/drive/ajax-create',
+            url: home+'employee/lead/drive/ajax-create',
             data: formData,
             processData: false,
             contentType: false,

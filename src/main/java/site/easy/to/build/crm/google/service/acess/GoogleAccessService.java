@@ -15,7 +15,7 @@ public interface GoogleAccessService {
     static final String SCOPE_CALENDAR = "https://www.googleapis.com/auth/calendar";
     static final String SCOPE_GMAIL = "https://www.googleapis.com/auth/gmail.modify";
     static final String SCOPE_DRIVE = "https://www.googleapis.com/auth/drive.file";
-    static final String REDIRECT_URI = "http://localhost:8080/crm/settings/handle-granted-access";
+    static final String REDIRECT_URI = "http://localhost:8080/employee/settings/handle-granted-access";
 
     public RedirectView grantGoogleAccess(Authentication authentication,
                                           HttpSession session,

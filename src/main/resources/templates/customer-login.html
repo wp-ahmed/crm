@@ -89,7 +89,7 @@
             </form>
             <div class="form-group m-b-0 m-t-30">
                 <div class="col-sm-12 text-center">
-                    If you are an Employer, please use this <a href="/login" class="text-primary m-l-5"><b>link to login</b></a>
+                    If you are an Employer, please use this <a th:href="${home + 'login'}" class="text-primary m-l-5"><b>link to login</b></a>
                 </div>
             </div>
         </div>
@@ -101,6 +101,9 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<script th:inline="javascript">
+    var home = /*[[${home}]]*/ null;
+</script>
 <script th:src="@{/js/library/jquery-3.2.1.min.js}" type="text/javascript">></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script th:src="@{/js/library/popper.min.js}" type="text/javascript">></script>
