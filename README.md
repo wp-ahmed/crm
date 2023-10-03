@@ -51,11 +51,12 @@ Replace `YourUserName` and `YourPassword` with your MySQL database credentials.
         
         During the setup of your Google credentials, find the section to add the API scopes and include the scopes relevant to the features you intend to use.
         
-        ![non-sensitive scopes.PNG](https://prod-files-secure.s3.us-west-2.amazonaws.com/d0d5b344-774e-4e75-9877-684e8bd06ee5/36f16601-91ce-45bc-bdc4-f6d35dac642c/non-sensitive_scopes.png)
-        
-        ![sensitive scopes.PNG](https://prod-files-secure.s3.us-west-2.amazonaws.com/d0d5b344-774e-4e75-9877-684e8bd06ee5/80adff2a-5685-4bf2-b5f6-a1a9f3465502/sensitive_scopes.png)
-        
-        ![restricted scopes.PNG](https://prod-files-secure.s3.us-west-2.amazonaws.com/d0d5b344-774e-4e75-9877-684e8bd06ee5/75ec0d2b-13da-47bd-86f9-8d6585e51d6b/restricted_scopes.png)
+        ![non-sensitive scopes](https://github.com/wp-ahmed/crm/assets/54330098/f1bc7026-591a-4d40-affa-e038e29591b2)
+
+        ![sensitive scopes](https://github.com/wp-ahmed/crm/assets/54330098/14d82922-0904-45d0-9874-da18c90fb352)
+
+        ![restricted scopes](https://github.com/wp-ahmed/crm/assets/54330098/b76a5cf8-c342-42e9-9848-6d0844f83575)
+
         
 3. **Configure the redirect URI for the Google authentication flow:**
 
