@@ -66,17 +66,18 @@ public class GoogleSettingsController {
                                           Model model,
                                           @RequestParam(required = false) boolean grantCalendarAccess,
                                           @RequestParam(required = false) boolean grantGmailAccess,
-                                          @RequestParam(required = false) boolean grantDriveAccess) {
+                                          @RequestParam(required = false) boolean grantDriveAccess,
+                                          HttpServletRequest request) {
         if ((authentication instanceof UsernamePasswordAuthenticationToken)) {
             return new RedirectView("/google-error");
         }
-        return googleAccessService.grantGoogleAccess(authentication, session, grantCalendarAccess, grantGmailAccess, grantDriveAccess);
+        return googleAccessService.grantGoogleAccess(authentication, session, grantCalendarAccess, grantGmailAccess, grantDriveAccess, request);
     }
 
     @GetMapping("/handle-granted-access")
     public String handleGrantedAccess(@Autowired HttpSession session, @RequestParam(value = "error", required = false) String error,
                                       @RequestParam(value = "code", required = false) String authCode, @RequestParam String state,
                                       HttpServletRequest request, Authentication authentication) throws IOException {
-        return googleAccessService.handleGrantedAccess(session, error, authCode, state, authentication);
+        return googleAccessService.handleGrantedAccess(session, error, authCode, state, authentication, request);
     }
 }
