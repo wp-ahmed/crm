@@ -8,7 +8,9 @@ import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ import java.util.*;
 @Service
 public class GoogleAccessServiceImpl implements GoogleAccessService {
 
+    @Value("${app.base-url}")
+    private String domain;
     private final UserService userService;
     private final OAuthUserService oAuthUserService;
     private final GoogleApiProperties googleApiProperties;
@@ -49,7 +53,7 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
     }
 
     @Override
-    public RedirectView grantGoogleAccess(Authentication authentication, HttpSession session, boolean grantCalendarAccess, boolean grantGmailAccess, boolean grantDriveAccess) {
+    public RedirectView grantGoogleAccess(Authentication authentication, HttpSession session, boolean grantCalendarAccess, boolean grantGmailAccess, boolean grantDriveAccess, HttpServletRequest request) {
         String state = "YOUR_STATE_VALUE";
         String accessType = "offline";
 
@@ -65,15 +69,23 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
         Set<String> SetOfRequiredScopes = new HashSet<>(Arrays.asList(scopes));
         SetOfRequiredScopes.addAll(newGrantedScopes);
 
+        String mainDomain = domain;
+        while (mainDomain.endsWith("/") || mainDomain.endsWith(" ")) {
+            mainDomain = mainDomain.substring(0, mainDomain.length() - 1);
+        }
+
+        String homeLink = request.getContextPath().isEmpty() ? "/" : request.getContextPath() + "/";
+        mainDomain = mainDomain+homeLink+REDIRECT_URI;
+
         List<String> requiredScopes = new ArrayList<>(SetOfRequiredScopes);
         GoogleAuthorizationCodeFlow authorizationCodeFlow = googleAuthorizationCodeFlowWrapper.build(requiredScopes);
-        String authorizationRequestUrl = googleApiProperties.buildAuthorizationUri(REDIRECT_URI, state, accessType, email, requiredScopes, authorizationCodeFlow);
+        String authorizationRequestUrl = googleApiProperties.buildAuthorizationUri(mainDomain, state, accessType, email, requiredScopes, authorizationCodeFlow);
 
         return new RedirectView(authorizationRequestUrl);
     }
 
     @Override
-    public String handleGrantedAccess(HttpSession session, String error, String authCode, String state, Authentication authentication) throws IOException {
+    public String handleGrantedAccess(HttpSession session, String error, String authCode, String state, Authentication authentication,  HttpServletRequest request) throws IOException {
 
         if ("access_denied".equals(error)) {
             // The user has canceled the consent page, so update the granted scopes
@@ -89,9 +101,16 @@ public class GoogleAccessServiceImpl implements GoogleAccessService {
 
         GoogleAuthorizationCodeFlow flow = googleAuthorizationCodeFlowWrapper.build(requiredScopes);
 
+        String mainDomain = domain;
+        while (mainDomain.endsWith("/") || mainDomain.endsWith(" ")) {
+            mainDomain = mainDomain.substring(0, mainDomain.length() - 1);
+        }
+
+        String homeLink = request.getContextPath().isEmpty() ? "/" : request.getContextPath() + "/";
+        mainDomain = mainDomain+homeLink+REDIRECT_URI;
 
         // Exchange the authorization code for an access token and a refresh token.
-        GoogleTokenResponse tokenResponse = flow.newTokenRequest(authCode).setRedirectUri(REDIRECT_URI).execute();
+        GoogleTokenResponse tokenResponse = flow.newTokenRequest(authCode).setRedirectUri(mainDomain).execute();
 
         // Obtain the OAuthUser object that represents the authenticated user. This assumes you have a method to retrieve the OAuthUser.
 
